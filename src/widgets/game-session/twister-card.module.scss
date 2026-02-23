@@ -1,0 +1,57 @@
+@use '../../app/styles/variables' as *;
+
+.card {
+  background: $color-surface;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  border: 2px solid $color-border;
+  max-width: 600px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.topic {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-primary;
+  background: rgba($color-primary, 0.1);
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+}
+
+.difficulty {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $color-text-muted;
+}
+
+.text {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  text-align: center;
+  color: $color-text;
+}
+
+.word {
+  transition: color $transition-fast, background $transition-fast;
+  padding: 2px 4px;
+  border-radius: 4px;
+
+  &.matched {
+    color: $color-success;
+    background: rgba($color-success, 0.15);
+  }
+
+  &.unmatched {
+    color: $color-error;
+    background: rgba($color-error, 0.15);
+  }
+}

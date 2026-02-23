@@ -1,0 +1,86 @@
+@use '../../app/styles/variables' as *;
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xl;
+}
+
+.container {
+  text-align: center;
+  max-width: 500px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: $color-text;
+  margin-bottom: $spacing-xl;
+}
+
+.scoreCard {
+  background: $color-surface;
+  border-radius: $radius-xl;
+  padding: $spacing-2xl;
+  margin-bottom: $spacing-xl;
+  box-shadow: $shadow-lg;
+}
+
+.scoreLabel {
+  font-size: 1rem;
+  color: $color-text-muted;
+  margin-bottom: $spacing-sm;
+}
+
+.scoreValue {
+  font-size: 4rem;
+  font-weight: 700;
+  color: $color-primary;
+}
+
+.maxScore {
+  font-size: 1.25rem;
+  color: $color-text-muted;
+}
+
+.message {
+  font-size: 1.125rem;
+  color: $color-text;
+  margin-bottom: $spacing-2xl;
+}
+
+.buttons {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: center;
+}
+
+.playAgainButton,
+.homeButton {
+  padding: $spacing-md $spacing-xl;
+  border-radius: $radius-lg;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all $transition-fast;
+}
+
+.playAgainButton {
+  background: $color-primary;
+  color: white;
+
+  &:hover {
+    background: $color-primary-dark;
+  }
+}
+
+.homeButton {
+  background: $color-surface;
+  border: 2px solid $color-border;
+  color: $color-text;
+
+  &:hover {
+    border-color: $color-primary;
+  }
+}

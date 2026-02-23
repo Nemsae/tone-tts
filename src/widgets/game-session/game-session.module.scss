@@ -1,0 +1,254 @@
+@use '../../app/styles/variables' as *;
+
+.session {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xl;
+  padding: $spacing-xl;
+  min-width: 400px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 600px;
+  gap: $spacing-md;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.progress {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $color-text-muted;
+}
+
+.score {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $color-primary;
+}
+
+.hud {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  border: 1px solid $color-border;
+}
+
+.hudLabel {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-size: 0.875rem;
+  color: $color-text-muted;
+  cursor: pointer;
+}
+
+.hudCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.hudSelect {
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border;
+  background: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg;
+  width: 100%;
+  max-width: 600px;
+}
+
+.transcript {
+  min-height: 60px;
+  padding: $spacing-md;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  width: 100%;
+  text-align: center;
+  color: $color-text-muted;
+  border: 2px solid $color-border;
+}
+
+.error {
+  color: $color-error;
+  font-size: 0.875rem;
+}
+
+.result {
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-lg;
+  font-weight: 600;
+  font-size: 1.125rem;
+
+  &.success {
+    background: rgba($color-success, 0.1);
+    color: $color-success;
+  }
+
+  &.failure {
+    background: rgba($color-error, 0.1);
+    color: $color-error;
+  }
+}
+
+.buttons {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.micButton,
+.checkButton,
+.nextButton {
+  padding: $spacing-md $spacing-xl;
+  border-radius: $radius-lg;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all $transition-fast;
+}
+
+.micButton {
+  background: $color-primary;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: $color-primary-dark;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.listening {
+    background: $color-error;
+    animation: pulse 1s infinite;
+  }
+}
+
+.checkButton {
+  background: $color-success;
+  color: white;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.nextButton {
+  background: $color-text-muted;
+  color: white;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.125rem;
+  color: $color-text-muted;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.preGame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xl;
+  padding: $spacing-xl;
+}
+
+.gameInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  border: 2px solid $color-border;
+  min-width: 300px;
+
+  h2 {
+    margin: 0 0 $spacing-sm;
+    font-size: 1.5rem;
+    color: $color-text;
+    text-align: center;
+  }
+}
+
+.gameInfoItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.gameInfoLabel {
+  color: $color-text-muted;
+}
+
+.gameInfoValue {
+  font-weight: 600;
+  color: $color-text;
+}
+
+.timerDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-lg $spacing-2xl;
+  background: $color-primary;
+  border-radius: $radius-xl;
+  color: white;
+}
+
+.timerLabel {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.9;
+}
+
+.timerValue {
+  font-size: 3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
