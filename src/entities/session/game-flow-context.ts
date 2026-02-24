@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
 import type { Twister } from '@/shared/vendor'
-import type { GameSettings } from '@/entities/session'
+import type { GameSettings } from './model'
 
-export type { GameSettings } from '@/entities/session'
+export type { GameSettings } from './model'
 
 export type TwisterTopic = 'Animals' | 'Tech' | 'Food'
 export type GameScreen = 'home' | 'play' | 'game-over'
@@ -22,6 +22,7 @@ export interface GameFlowContextValue {
   returnHome: () => void
   replay: () => void
   nextTwister: () => void
+  updateRounds: (rounds: number) => void
 }
 
 export const GameFlowContext = createContext<GameFlowContextValue | null>(null)

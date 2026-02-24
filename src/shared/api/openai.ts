@@ -5,12 +5,12 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 })
 
-export interface TwisterGenerationParams {
+interface LLMParams {
   systemPrompt: string
   userMessage: string
 }
 
-export async function callOpenAI({ systemPrompt, userMessage }: TwisterGenerationParams): Promise<string> {
+export async function callOpenAI({ systemPrompt, userMessage }: LLMParams): Promise<string> {
   const response = await openai.chat.completions.create({
     model: 'o3-mini',
     messages: [

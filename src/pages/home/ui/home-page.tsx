@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { generateAITwisters, isApiKeyConfigured, type PredefinedTopic } from '@/features/twister-gen'
+import { generateAITwisters, isApiKeyConfigured, type PredefinedTopic } from '@/features/twister-generator'
 import { createSession, saveSession, type GameSettings } from '@/entities/session'
+import { useGameFlow } from '@/entities/session'
 import type { TwisterLength } from '@/shared/vendor'
 import styles from '../home.module.scss'
 
@@ -17,12 +18,12 @@ const ROUND_MAX = 10
 
 export function HomePage() {
   const navigate = useNavigate()
+  const gameFlow = useGameFlow()
   const [selectedTopic, setSelectedTopic] = useState<PredefinedTopic | ''>('')
   const [customTopic, setCustomTopic] = useState('')
   const [useCustomTopic, setUseCustomTopic] = useState(false)
   const [length, setLength] = useState<TwisterLength>('medium')
   const [customLength, setCustomLength] = useState(10)
-  const [rounds, setRounds] = useState(5)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -51,9 +52,9 @@ export function HomePage() {
         topic,
         length,
         length === 'custom' ? customLength : undefined,
-        rounds,
+        gameFlow.rounds,
       )
-      const settings: GameSettings = { topic, length, customLength: length === 'custom' ? customLength : undefined, rounds }
+      const settings: GameSettings = { topic, length, customLength: length === 'custom' ? customLength : undefined, rounds: gameFlow.rounds }
       const session = createSession(twisters, settings)
       saveSession(session)
       navigate('/play')
@@ -152,14 +153,14 @@ export function HomePage() {
         </div>
 
         <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Rounds: {rounds}</h2>
+          <h2 className={styles.sectionTitle}>Rounds: {gameFlow.rounds}</h2>
           <input
             type="range"
             className={styles.rangeInput}
             min={ROUND_MIN}
             max={ROUND_MAX}
-            value={rounds}
-            onChange={(e) => setRounds(Number(e.target.value))}
+            value={gameFlow.rounds}
+            onChange={(e) => gameFlow.updateRounds(Number(e.target.value))}
           />
           <div className={styles.rangeLabels}>
             <span>{ROUND_MIN}</span>

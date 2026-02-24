@@ -6,14 +6,14 @@ interface GameFlowProviderProps {
   children: ReactNode
 }
 
-
+const DEFAULT_ROUNDS = 3
 
 export function GameFlowProvider({ children }: GameFlowProviderProps) {
   const [screen, setScreen] = useState<GameScreen>('home')
   const [topic, setTopic] = useState<TwisterTopic | string>('Animals')
   const [length, setLength] = useState<TwisterLength>('medium')
   const [customLength, setCustomLength] = useState<number | undefined>(undefined)
-  const [rounds, setRounds] = useState(5)
+  const [rounds, setRounds] = useState(DEFAULT_ROUNDS)
   const [twisters, setTwisters] = useState<Twister[]>([])
   const [currentTwisterIndex, setCurrentTwisterIndex] = useState(0)
   const [finalAccuracy, setFinalAccuracy] = useState(0)
@@ -54,6 +54,10 @@ export function GameFlowProvider({ children }: GameFlowProviderProps) {
     setScreen('play')
   }
 
+  const updateRounds = (newRounds: number) => {
+    setRounds(newRounds)
+  }
+
   return (
     <GameFlowContext.Provider
       value={{
@@ -71,6 +75,7 @@ export function GameFlowProvider({ children }: GameFlowProviderProps) {
         returnHome,
         replay,
         nextTwister,
+        updateRounds,
       }}
     >
       {children}

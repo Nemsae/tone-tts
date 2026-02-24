@@ -16,57 +16,25 @@ function getLengthInstruction(length: TwisterLength, customLength?: number): str
   }
   return lengthMap[length as 'short' | 'medium' | 'long']
 }
-
-export async function generateTwistersWithAI({
-  topic,
-  length,
-  customLength,
-  count,
-}: {
-  topic: string
-  length: TwisterLength
-  customLength?: number
-  count: number
-}): Promise<string[]> {
-  const lengthInstruction = getLengthInstruction(length, customLength)
-
-  const systemPrompt = `You are a tongue twister generator. Generate ${count} unique, fun, and challenging tongue twisters that are difficult to say quickly.
-Each tongue twister should feature words related to the topic: ${topic}.
-${lengthInstruction}
-Return only the tongue twisters, one per line, with no numbering, no explanations, and no additional text.`
-
-  const content = await callOpenAI({
-    systemPrompt,
-    userMessage: `Generate ${count} unique tongue twisters about ${topic}.`,
-  })
-
-  return content.split('\n').map((line) => line.trim()).filter((line) => line.length > 0)
-}
-
-export async function generateAITwister(
-  topic: string,
-  length: TwisterLength,
-  customLength?: number,
-): Promise<Twister> {
-  const twisters = await generateTwistersWithAI({ topic, length, customLength, count: 1 })
-  const text = twisters[0] ?? ''
-  const difficulty = length === 'short' ? 1 : length === 'medium' ? 2 : length === 'long' ? 3 : 2
-  return {
-    id: `ai-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-    text,
-    difficulty: difficulty as 1 | 2 | 3,
-    topic: PREDEFINED_TOPICS.includes(topic as PredefinedTopic) ? topic as PredefinedTopic : 'Animals',
-    length,
-  }
-}
-
 export async function generateAITwisters(
   topic: string,
   length: TwisterLength,
   customLength: number | undefined,
   rounds: number,
 ): Promise<Twister[]> {
-  const texts = await generateTwistersWithAI({ topic, length, customLength, count: rounds })
+  const lengthInstruction = getLengthInstruction(length, customLength)
+
+  const systemPrompt = `You are a tongue twister generator. Generate ${rounds} unique, fun, and challenging tongue twisters that are difficult to say quickly.
+Each tongue twister should feature words related to the topic: ${topic}.
+${lengthInstruction}
+Return only the tongue twisters, one per line, with no numbering, no explanations, and no additional text.`
+
+  const content = await callOpenAI({
+    systemPrompt,
+    userMessage: `Generate ${rounds} unique tongue twisters about ${topic}.`,
+  })
+
+  const texts = content.split('\n').map((line) => line.trim()).filter((line) => line.length > 0)
   const difficulty = length === 'short' ? 1 : length === 'medium' ? 2 : length === 'long' ? 3 : 2
   const usedTexts = new Set<string>()
 

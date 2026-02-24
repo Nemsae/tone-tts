@@ -22,12 +22,6 @@ Styling: Use SCSS utility classes directly in JSX. Do not use CSS modules unless
 
 State Management: Use React Context and standard Hooks (useState, useReducer, useEffect). Do NOT use Redux or external state libraries.
 
-Resilience: Always handle errors gracefully.
-
-If the Web Speech API fails or permissions are denied, show a fallback UI/modal.
-
-If the LLM API fails, fallback to a hardcoded array of tongue twisters.
-
 Architecture Conventions (FSD Strict Rules)
 
 Import Hierarchy: Modules can only import from layers below them.
@@ -36,6 +30,8 @@ app -> pages -> widgets -> features -> entities -> shared.
 
 NEVER import a higher layer into a lower layer (e.g., entities cannot import features).
 
-Cross-Slice Imports: Slices on the same layer cannot import each other directly (e.g., features/speech-scoring cannot import features/twister-gen). If they need to communicate, do it at the widget or page level.
+Cross-Slice Imports: Slices on the same layer cannot import each other directly (e.g., features/speech-scoring cannot import features/twister-generator). If they need to communicate, do it at the widget or page level.
 
 Public APIs: Every slice (e.g., a specific feature or entity) MUST have an index.ts file that exports its public API. External modules must only import from this index.ts.
+
+Always ensure `npm run lint:all` passes with final edits/changes.

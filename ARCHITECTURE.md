@@ -4,10 +4,12 @@ Architecture: Feature-Sliced Design (FSD)
 
 This document serves as the source of truth for the project structure. All automated agents and contributors must adhere to these rules to maintain high cohesion and low coupling.
 
+![FSD Visual Schema](fsd_visual_schema.jpg)
+
 ---
 
 ## 1. The Layer Hierarchy
-Code is organized into layers, ordered from **lowest to highest**. A module may only import from layers **strictly below** it.
+Code is organized into layers, ordered from **highest to lowest**. A module may only import from layers **strictly below** it.
 
 | Layer | Responsibility | Allowed Imports |
 | :--- | :--- | :--- |
