@@ -5,9 +5,10 @@ A React-based web game for practicing pronunciation using Twister-style word cha
 ## Setup
 
 1. Clone the repo
-2. Copy `.env.example` to `.env` and add your OpenAI API key:
+1. Copy `.env.example` to `.env` and add your OpenAI API key:
    ```
    VITE_OPENAI_API_KEY=your_api_key_here
    ```
-3. Run `npm install`
-4. Run `npm run dev`
+1. Run `npm install`
+1. Run `npm run dev`
+1. Visit http://localhost:5173/ in your browser. Note: Brave currently does not support [speech recognition api](https://github.com/brave/brave-browser/issues/3725#issuecomment-555694620).
