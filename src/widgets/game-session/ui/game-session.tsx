@@ -4,7 +4,7 @@ import type { Session, ScoringResult } from '@/entities/session'
 import { scoreTwister } from '@/entities/session'
 import type { Twister } from '@/shared/vendor'
 import { useSpeech } from '@/shared/ui/use-speech'
-import { getCurrentTwister, advanceSession, addRoundResult, isSessionComplete, calculateAccuracy, getElapsedTime, saveSession } from '@/entities/session'
+import { getCurrentTwister, advanceSession, addRoundResult, isSessionComplete, calculateAccuracy, saveSession } from '@/entities/session'
 import { GameHud } from './game-hud'
 import styles from './game-session.module.scss'
 import twisterCardStyles from './twister-card.module.scss'
@@ -61,9 +61,14 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
   const [gameStarted, setGameStarted] = useState(false)
   const [elapsedTime, setElapsedTime] = useState(0)
   const [gameStartTime, setGameStartTime] = useState<number | null>(null)
-  const autoCheckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null)
+  const [isPaused, setIsPaused] = useState(false)
+  const [pauseStartTime, setPauseStartTime] = useState<number | null>(null)
+  const [totalPausedTime, setTotalPausedTime] = useState(0)
+const autoCheckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const wasListeningRef = useRef(false)
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const elapsedTimeRef = useRef(0)
 
   const { isListening, transcript, error, startListening, stopListening } = useSpeech()
 
@@ -115,6 +120,19 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
     setLiveWordsAttempted(result.wordsAttempted)
   }, [transcript, currentTwister])
 
+  useEffect(() => {
+    const checkMicPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+        stream.getTracks().forEach((track) => track.stop())
+        setHasMicPermission(true)
+      } catch {
+        setHasMicPermission(false)
+      }
+    }
+    checkMicPermission()
+  }, [])
+
   const handleNext = useCallback(() => {
     if (!currentTwister) return
 
@@ -124,13 +142,12 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
       clearTimeout(autoCheckTimerRef.current)
     }
 
-    setTimeout(() => {
+setTimeout(() => {
       const nextSession = advanceSession(session)
 
       if (isSessionComplete(nextSession)) {
         const accuracy = calculateAccuracy(nextSession)
-        const elapsedTime = getElapsedTime(nextSession)
-        onComplete({ accuracy, elapsedTime })
+        onComplete({ accuracy, elapsedTime: elapsedTimeRef.current })
       } else {
         setSession(nextSession)
         onSessionChange(nextSession)
@@ -148,10 +165,14 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
     }
   }, [scoringResult, handleNext])
 
-  useEffect(() => {
-    if (gameStarted && gameStartTime) {
+useEffect(() => {
+    if (gameStarted && gameStartTime && !isPaused) {
       timerIntervalRef.current = setInterval(() => {
-        setElapsedTime(Date.now() - gameStartTime)
+        const currentTime = Date.now()
+        const pausedTime = pauseStartTime ? currentTime - pauseStartTime : 0
+        const newElapsedTime = currentTime - gameStartTime - totalPausedTime - pausedTime
+        setElapsedTime(newElapsedTime)
+        elapsedTimeRef.current = newElapsedTime
       }, 100)
     }
 
@@ -160,13 +181,28 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
         clearInterval(timerIntervalRef.current)
       }
     }
-  }, [gameStarted, gameStartTime])
+  }, [gameStarted, gameStartTime, isPaused, pauseStartTime, totalPausedTime])
 
   const handleStartGame = useCallback(() => {
     setGameStartTime(Date.now())
     setGameStarted(true)
     startListening()
   }, [startListening])
+
+  const handlePause = useCallback(() => {
+    setIsPaused(true)
+    setPauseStartTime(Date.now())
+    stopListening()
+  }, [stopListening])
+
+  const handleResume = useCallback(() => {
+    if (pauseStartTime) {
+      setTotalPausedTime((prev) => prev + Date.now() - pauseStartTime)
+    }
+    setIsPaused(false)
+    setPauseStartTime(null)
+    startListening()
+  }, [pauseStartTime, startListening])
 
   if (!currentTwister) {
     return <div className={styles.loading}>Loading...</div>
@@ -193,6 +229,11 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
               <span className={styles.gameInfoLabel}>Rounds:</span>
               <span className={styles.gameInfoValue}>{session.settings?.rounds}</span>
             </div>
+            {hasMicPermission === false && (
+              <div className={styles.error}>
+                Microphone access is required. Please enable it in your browser settings and refresh the page.
+              </div>
+            )}
           </div>
           <button className={styles.micButton} onClick={handleStartGame}>
             Start Speaking
@@ -219,20 +260,14 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
               </div>
             )}
 
-            <div className={styles.buttons}>
+<div className={styles.buttons}>
               {!isListening ? (
                 <button className={styles.micButton} onClick={startListening}>
                   Start Listening
                 </button>
               ) : (
-                <button className={`${styles.micButton} ${styles.listening}`} onClick={stopListening}>
+                <button className={`${styles.micButton} ${styles.listening}`} onClick={handlePause}>
                   Stop
-                </button>
-              )}
-
-              {transcript && !scoringResult?.isMatch && (
-                <button className={styles.checkButton} onClick={handleScore}>
-                  Check
                 </button>
               )}
 
@@ -243,6 +278,18 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
               )}
             </div>
           </div>
+
+          {isPaused && (
+            <div className={styles.pauseOverlay}>
+              <div className={styles.pauseModal}>
+                <h2>Game Paused</h2>
+                <p>Take a break! Click resume when you're ready to continue.</p>
+                <button className={styles.resumeButton} onClick={handleResume}>
+                  Resume Game
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
