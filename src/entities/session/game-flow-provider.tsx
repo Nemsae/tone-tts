@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
-import { GameFlowContext, type GameScreen, type TwisterTopic, type GameSettings } from './game-flow-context'
+import { GameFlowContext, type GameScreen, type TwisterTopic } from './game-flow-context'
+import type { GameSettings } from './model'
 import type { Twister, TwisterLength } from '@/shared/vendor'
 
 interface GameFlowProviderProps {

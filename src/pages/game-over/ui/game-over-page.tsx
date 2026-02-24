@@ -22,11 +22,6 @@ export function GameOverPage() {
     navigate('/')
   }
 
-  const handleHome = () => {
-    clearFinalResult()
-    navigate('/')
-  }
-
   if (!result) {
     navigate('/')
     return null
@@ -61,9 +56,6 @@ export function GameOverPage() {
         <div className={styles.buttons}>
           <button className={styles.playAgainButton} onClick={handlePlayAgain}>
             Play Again
-          </button>
-          <button className={styles.homeButton} onClick={handleHome}>
-            Home
           </button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback, useRef } from 'react'
-import type { Session, ScoringResult } from '@/entities/session'
+import type { Session, ScoringResult, GameSettings } from '@/entities/session'
 import { scoreTwister } from '@/entities/session'
 import type { Twister } from '@/shared/vendor'
 import { useSpeech } from '@/shared/ui/use-speech'
@@ -22,17 +22,24 @@ interface TwisterCardProps {
   twister: Twister
   matchedWords?: boolean[]
   wordsAttempted?: number
+  settings?: GameSettings
 }
 
-function TwisterCard({ twister, matchedWords, wordsAttempted }: TwisterCardProps) {
+function TwisterCard({ twister, matchedWords, wordsAttempted, settings }: TwisterCardProps) {
   const words = twister.text.split(' ')
   const difficultyLabels = { 1: 'Easy', 2: 'Medium', 3: 'Hard' }
+  
+  const displayTopic = settings?.topic || twister.topic
+  const isCustomLength = twister.length === 'custom'
+  const difficultyDisplay = isCustomLength && settings?.customLength 
+    ? `Custom (${settings.customLength} words)` 
+    : difficultyLabels[twister.difficulty]
 
   return (
     <div className={twisterCardStyles.card}>
       <div className={twisterCardStyles.header}>
-        <span className={twisterCardStyles.topic}>{twister.topic}</span>
-        <span className={twisterCardStyles.difficulty}>{difficultyLabels[twister.difficulty]}</span>
+        <span className={twisterCardStyles.topic}>{displayTopic}</span>
+        <span className={twisterCardStyles.difficulty}>{difficultyDisplay}</span>
       </div>
       <div className={twisterCardStyles.text}>
         {words.map((word, index) => {
@@ -266,7 +273,7 @@ useEffect(() => {
         <>
           <GameHud session={session} elapsedTime={elapsedTime} />
 
-          <TwisterCard twister={currentTwister} matchedWords={scoringResult?.matchedWords ?? liveMatchedWords} wordsAttempted={scoringResult?.wordsAttempted ?? liveWordsAttempted} />
+          <TwisterCard twister={currentTwister} matchedWords={scoringResult?.matchedWords ?? liveMatchedWords} wordsAttempted={scoringResult?.wordsAttempted ?? liveWordsAttempted} settings={session.settings} />
 
           <div className={styles.controls}>
             <div className={styles.transcript}>

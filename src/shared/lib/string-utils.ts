@@ -2,15 +2,6 @@ export function normalizeText(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-export function splitWords(value: string): string[] {
-  const normalized = normalizeText(value)
-  if (normalized.length === 0) {
-    return []
-  }
-
-  return normalized.split(' ')
-}
-
 export function levenshteinDistance(source: string, target: string): number {
   if (source === target) {
     return 0

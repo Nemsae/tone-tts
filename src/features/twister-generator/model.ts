@@ -1,8 +1,7 @@
 import type { Twister, TwisterLength } from '@/shared/vendor'
 import { callOpenAI, isApiKeyConfigured } from '@/shared/api'
 
-const PREDEFINED_TOPICS = ['Animals', 'Tech', 'Food'] as const
-export type PredefinedTopic = typeof PREDEFINED_TOPICS[number]
+export type PredefinedTopic = 'Animals' | 'Tech' | 'Food'
 
 
 function getLengthInstruction(length: TwisterLength, customLength?: number): string {
@@ -49,7 +48,7 @@ Return only the tongue twisters, one per line, with no numbering, no explanation
       id: `ai-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
       text,
       difficulty: difficulty as 1 | 2 | 3,
-      topic: PREDEFINED_TOPICS.includes(topic as PredefinedTopic) ? topic as PredefinedTopic : 'Animals',
+      topic,
       length,
     }))
 }

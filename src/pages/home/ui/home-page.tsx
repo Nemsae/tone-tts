@@ -34,12 +34,6 @@ export function HomePage() {
     }
   }, [useCustomTopic])
 
-  useEffect(() => {
-    if (useCustomTopic && customTopicInputRef.current) {
-      customTopicInputRef.current.focus()
-    }
-  }, [useCustomTopic])
-
   const handleStartGame = async () => {
     const topic = useCustomTopic ? customTopic : selectedTopic
     if (!topic) {

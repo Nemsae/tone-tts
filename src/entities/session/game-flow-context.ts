@@ -1,10 +1,7 @@
 import { createContext, useContext } from 'react'
-import type { Twister } from '@/shared/vendor'
+import type { Twister, TwisterTopic } from '@/shared/vendor'
 import type { GameSettings } from './model'
 
-export type { GameSettings } from './model'
-
-export type TwisterTopic = 'Animals' | 'Tech' | 'Food'
 export type GameScreen = 'home' | 'play' | 'game-over'
 
 export interface GameFlowContextValue {
