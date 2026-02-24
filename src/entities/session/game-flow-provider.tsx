@@ -1,63 +1,63 @@
-import { useState, type ReactNode } from 'react'
-import { GameFlowContext, type GameScreen, type TwisterTopic } from './game-flow-context'
-import type { GameSettings } from './model'
-import type { Twister, TwisterLength } from '@/shared/vendor'
+import { useState, type ReactNode } from 'react';
+import { GameFlowContext, type GameScreen, type TwisterTopic } from './game-flow-context';
+import type { GameSettings } from './model';
+import type { Twister, TwisterLength } from '@/shared/vendor';
 
 interface GameFlowProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
-const DEFAULT_ROUNDS = 3
+const DEFAULT_ROUNDS = 3;
 
 export function GameFlowProvider({ children }: GameFlowProviderProps) {
-  const [screen, setScreen] = useState<GameScreen>('home')
-  const [topic, setTopic] = useState<TwisterTopic | string>('Animals')
-  const [length, setLength] = useState<TwisterLength>('medium')
-  const [customLength, setCustomLength] = useState<number | undefined>(undefined)
-  const [rounds, setRounds] = useState(DEFAULT_ROUNDS)
-  const [twisters, setTwisters] = useState<Twister[]>([])
-  const [currentTwisterIndex, setCurrentTwisterIndex] = useState(0)
-  const [finalAccuracy, setFinalAccuracy] = useState(0)
-  const [finalTime, setFinalTime] = useState(0)
+  const [screen, setScreen] = useState<GameScreen>('home');
+  const [topic, setTopic] = useState<TwisterTopic | string>('Animals');
+  const [length, setLength] = useState<TwisterLength>('medium');
+  const [customLength, setCustomLength] = useState<number | undefined>(undefined);
+  const [rounds, setRounds] = useState(DEFAULT_ROUNDS);
+  const [twisters, setTwisters] = useState<Twister[]>([]);
+  const [currentTwisterIndex, setCurrentTwisterIndex] = useState(0);
+  const [finalAccuracy, setFinalAccuracy] = useState(0);
+  const [finalTime, setFinalTime] = useState(0);
 
   const startGame = (settings: GameSettings, generatedTwisters: Twister[]) => {
-    setTopic(settings.topic)
-    setLength(settings.length)
-    setCustomLength(settings.customLength)
-    setRounds(settings.rounds)
-    setTwisters(generatedTwisters)
-    setCurrentTwisterIndex(0)
-    setScreen('play')
-  }
+    setTopic(settings.topic);
+    setLength(settings.length);
+    setCustomLength(settings.customLength);
+    setRounds(settings.rounds);
+    setTwisters(generatedTwisters);
+    setCurrentTwisterIndex(0);
+    setScreen('play');
+  };
 
   const nextTwister = () => {
-    setCurrentTwisterIndex((prev) => prev + 1)
-  }
+    setCurrentTwisterIndex((prev) => prev + 1);
+  };
 
   const finishGame = (result: { accuracy: number; elapsedTime: number }) => {
-    setFinalAccuracy(result.accuracy)
-    setFinalTime(result.elapsedTime)
-    setScreen('game-over')
-  }
+    setFinalAccuracy(result.accuracy);
+    setFinalTime(result.elapsedTime);
+    setScreen('game-over');
+  };
 
   const returnHome = () => {
-    setScreen('home')
-    setFinalAccuracy(0)
-    setFinalTime(0)
-    setTwisters([])
-    setCurrentTwisterIndex(0)
-  }
+    setScreen('home');
+    setFinalAccuracy(0);
+    setFinalTime(0);
+    setTwisters([]);
+    setCurrentTwisterIndex(0);
+  };
 
   const replay = () => {
-    setCurrentTwisterIndex(0)
-    setFinalAccuracy(0)
-    setFinalTime(0)
-    setScreen('play')
-  }
+    setCurrentTwisterIndex(0);
+    setFinalAccuracy(0);
+    setFinalTime(0);
+    setScreen('play');
+  };
 
   const updateRounds = (newRounds: number) => {
-    setRounds(newRounds)
-  }
+    setRounds(newRounds);
+  };
 
   return (
     <GameFlowContext.Provider
@@ -81,5 +81,5 @@ export function GameFlowProvider({ children }: GameFlowProviderProps) {
     >
       {children}
     </GameFlowContext.Provider>
-  )
+  );
 }

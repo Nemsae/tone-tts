@@ -1,1 +1,1 @@
-export { PlayPage } from './ui/play-page'
+export { PlayPage } from './ui/play-page';

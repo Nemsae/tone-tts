@@ -1,1 +1,1 @@
-export { GameSession } from './ui/game-session'
+export { GameSession } from './ui/game-session';

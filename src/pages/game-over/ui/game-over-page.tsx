@@ -1,39 +1,39 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { loadFinalResult, clearFinalResult, type FinalResult } from '@/entities/session'
-import styles from './game-over.module.scss'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { loadFinalResult, clearFinalResult, type FinalResult } from '@/entities/session';
+import styles from './game-over.module.scss';
 
 function formatTime(ms: number): string {
-  const seconds = Math.floor(ms / 1000)
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
   if (minutes > 0) {
-    return `${minutes}m ${remainingSeconds}s`
+    return `${minutes}m ${remainingSeconds}s`;
   }
-  return `${seconds}s`
+  return `${seconds}s`;
 }
 
 export function GameOverPage() {
-  const navigate = useNavigate()
-  const [result] = useState<FinalResult | null>(() => loadFinalResult())
+  const navigate = useNavigate();
+  const [result] = useState<FinalResult | null>(() => loadFinalResult());
 
   const handlePlayAgain = () => {
-    clearFinalResult()
-    navigate('/')
-  }
+    clearFinalResult();
+    navigate('/');
+  };
 
   if (!result) {
-    navigate('/')
-    return null
+    navigate('/');
+    return null;
   }
 
-  let message = ''
+  let message = '';
   if (result.accuracy >= 85) {
-    message = "Amazing! You're a tongue twister master!"
+    message = "Amazing! You're a tongue twister master!";
   } else if (result.accuracy >= 70) {
-    message = 'Great job! Keep practicing!'
+    message = 'Great job! Keep practicing!';
   } else {
-    message = 'Good effort! Try again!'
+    message = 'Good effort! Try again!';
   }
 
   return (
@@ -60,5 +60,5 @@ export function GameOverPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

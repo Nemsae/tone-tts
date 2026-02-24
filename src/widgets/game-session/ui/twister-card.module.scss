@@ -52,7 +52,9 @@
 }
 
 .word {
-  transition: color $transition-fast, background $transition-fast;
+  transition:
+    color $transition-fast,
+    background $transition-fast;
   padding: 2px 4px;
   border-radius: 4px;
 

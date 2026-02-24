@@ -1,77 +1,86 @@
-import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { generateAITwisters, isApiKeyConfigured, type PredefinedTopic } from '@/features/twister-generator'
-import { createSession, saveSession, type GameSettings } from '@/entities/session'
-import { useGameFlow } from '@/entities/session'
-import type { TwisterLength } from '@/shared/vendor'
-import styles from './home.module.scss'
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  generateAITwisters,
+  isApiKeyConfigured,
+  type PredefinedTopic,
+} from '@/features/twister-generator';
+import { createSession, saveSession, type GameSettings } from '@/entities/session';
+import { useGameFlow } from '@/entities/session';
+import type { TwisterLength } from '@/shared/vendor';
+import styles from './home.module.scss';
 
-const PREDEFINED_TOPICS = ['Animals', 'Tech', 'Food'] as const
+const PREDEFINED_TOPICS = ['Animals', 'Tech', 'Food'] as const;
 const DIFFICULTY_OPTIONS: { value: TwisterLength; label: string; words: string }[] = [
   { value: 'short', label: 'Easy', words: '~5 words' },
   { value: 'medium', label: 'Medium', words: '~10 words' },
   { value: 'long', label: 'Hard', words: '~20 words' },
   { value: 'custom', label: 'Custom', words: '5-40 words' },
-]
-const ROUND_MIN = 1
-const ROUND_MAX = 10
+];
+const ROUND_MIN = 1;
+const ROUND_MAX = 10;
 
 export function HomePage() {
-  const navigate = useNavigate()
-  const gameFlow = useGameFlow()
-  const [selectedTopic, setSelectedTopic] = useState<PredefinedTopic | ''>('')
-  const [customTopic, setCustomTopic] = useState('')
-  const [useCustomTopic, setUseCustomTopic] = useState(true)
-  const [length, setLength] = useState<TwisterLength>('medium')
-  const [customLength, setCustomLength] = useState(10)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const customTopicInputRef = useRef<HTMLInputElement>(null)
+  const navigate = useNavigate();
+  const gameFlow = useGameFlow();
+  const [selectedTopic, setSelectedTopic] = useState<PredefinedTopic | ''>('');
+  const [customTopic, setCustomTopic] = useState('');
+  const [useCustomTopic, setUseCustomTopic] = useState(true);
+  const [length, setLength] = useState<TwisterLength>('medium');
+  const [customLength, setCustomLength] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const customTopicInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (useCustomTopic && customTopicInputRef.current) {
-      customTopicInputRef.current.focus()
+      customTopicInputRef.current.focus();
     }
-  }, [useCustomTopic])
+  }, [useCustomTopic]);
 
   const handleStartGame = async () => {
-    const topic = useCustomTopic ? customTopic : selectedTopic
+    const topic = useCustomTopic ? customTopic : selectedTopic;
     if (!topic) {
-      setError('Please select or enter a topic')
-      return
+      setError('Please select or enter a topic');
+      return;
     }
 
     if (useCustomTopic && topic.length < 2) {
-      setError('Custom topic must be at least 2 characters')
-      return
+      setError('Custom topic must be at least 2 characters');
+      return;
     }
 
     if (length === 'custom' && (customLength < 5 || customLength > 40)) {
-      setError('Custom difficulty must be between 5 and 40 words')
-      return
+      setError('Custom difficulty must be between 5 and 40 words');
+      return;
     }
 
-    setError('')
-    setIsLoading(true)
+    setError('');
+    setIsLoading(true);
 
     try {
       const twisters = await generateAITwisters(
         topic,
         length,
         length === 'custom' ? customLength : undefined,
-        gameFlow.rounds,
-      )
-      const settings: GameSettings = { topic, length, customLength: length === 'custom' ? customLength : undefined, rounds: gameFlow.rounds }
-      const session = createSession(twisters, settings)
-      saveSession(session)
-      navigate('/play')
+        gameFlow.rounds
+      );
+      const settings: GameSettings = {
+        topic,
+        length,
+        customLength: length === 'custom' ? customLength : undefined,
+        rounds: gameFlow.rounds,
+      };
+      const session = createSession(twisters, settings);
+      saveSession(session);
+      navigate('/play');
     } catch (err) {
-      setError('Failed to generate tongue twisters. Please check your API key.')
-      console.error(err)
+      setError('Failed to generate tongue twisters. Please check your API key.');
+      console.error(err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (!isApiKeyConfigured()) {
     return (
@@ -84,7 +93,7 @@ export function HomePage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -103,16 +112,14 @@ export function HomePage() {
               placeholder="e.g. Marvel Superheroes, Lord of the Rings, 80s Music..."
               value={customTopic}
               onChange={(e) => {
-                setCustomTopic(e.target.value)
+                setCustomTopic(e.target.value);
                 if (e.target.value) {
-                  setSelectedTopic('')
-                  setUseCustomTopic(true)
+                  setSelectedTopic('');
+                  setUseCustomTopic(true);
                 }
               }}
             />
-            <span className={styles.hintText}>
-              or select a preset below
-            </span>
+            <span className={styles.hintText}>or select a preset below</span>
           </div>
           <div className={styles.topicGrid}>
             {PREDEFINED_TOPICS.map((topic) => (
@@ -120,8 +127,8 @@ export function HomePage() {
                 key={topic}
                 className={`${styles.topicButton} ${styles.secondaryButton} ${selectedTopic === topic && !useCustomTopic ? styles.selected : ''}`}
                 onClick={() => {
-                  setSelectedTopic(topic)
-                  setUseCustomTopic(false)
+                  setSelectedTopic(topic);
+                  setUseCustomTopic(false);
                 }}
               >
                 {topic}
@@ -177,14 +184,10 @@ export function HomePage() {
 
         {error && <div className={styles.error}>{error}</div>}
 
-        <button
-          className={styles.startButton}
-          onClick={handleStartGame}
-          disabled={isLoading}
-        >
+        <button className={styles.startButton} onClick={handleStartGame} disabled={isLoading}>
           {isLoading ? 'Generating...' : 'Start Game'}
         </button>
       </div>
     </div>
-  )
+  );
 }

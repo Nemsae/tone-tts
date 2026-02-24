@@ -1,13 +1,13 @@
-import OpenAI from 'openai'
+import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
-})
+});
 
 interface LLMParams {
-  systemPrompt: string
-  userMessage: string
+  systemPrompt: string;
+  userMessage: string;
 }
 
 export async function callOpenAI({ systemPrompt, userMessage }: LLMParams): Promise<string> {
@@ -18,11 +18,11 @@ export async function callOpenAI({ systemPrompt, userMessage }: LLMParams): Prom
       { role: 'user', content: userMessage },
     ],
     reasoning_effort: 'low',
-  })
+  });
 
-  return response.choices[0]?.message?.content?.trim() ?? ''
+  return response.choices[0]?.message?.content?.trim() ?? '';
 }
 
 export function isApiKeyConfigured(): boolean {
-  return Boolean(import.meta.env.VITE_OPENAI_API_KEY)
+  return Boolean(import.meta.env.VITE_OPENAI_API_KEY);
 }

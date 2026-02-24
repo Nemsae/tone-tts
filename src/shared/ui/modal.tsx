@@ -1,14 +1,14 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 export interface ModalProps {
-  isOpen: boolean
-  onClose: () => void
-  title: string
-  children: ReactNode
-  confirmLabel?: string
-  cancelLabel?: string
-  onConfirm?: () => void
-  confirmVariant?: 'primary' | 'danger'
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onConfirm?: () => void;
+  confirmVariant?: 'primary' | 'danger';
 }
 
 export function Modal({
@@ -21,13 +21,13 @@ export function Modal({
   onConfirm,
   confirmVariant = 'primary',
 }: ModalProps) {
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose()
+      onClose();
     }
-  }
+  };
 
   return (
     <div className="modal-backdrop" onClick={handleBackdropClick}>
@@ -41,15 +41,12 @@ export function Modal({
             </button>
           )}
           {onConfirm && (
-            <button
-              className={`modal-btn modal-btn-${confirmVariant}`}
-              onClick={onConfirm}
-            >
+            <button className={`modal-btn modal-btn-${confirmVariant}`} onClick={onConfirm}>
               {confirmLabel}
             </button>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }

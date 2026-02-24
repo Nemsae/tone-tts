@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { HomePage } from '@/pages/home'
-import { PlayPage } from '@/pages/play'
-import { GameOverPage } from '@/pages/game-over'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HomePage } from '@/pages/home';
+import { PlayPage } from '@/pages/play';
+import { GameOverPage } from '@/pages/game-over';
 
 export function AppRouter() {
   return (
@@ -12,5 +12,5 @@ export function AppRouter() {
         <Route path="/game-over" element={<GameOverPage />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
