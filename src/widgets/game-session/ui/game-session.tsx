@@ -4,6 +4,7 @@ import type { Session, ScoringResult } from '@/entities/session'
 import { scoreTwister } from '@/entities/session'
 import type { Twister } from '@/shared/vendor'
 import { useSpeech } from '@/shared/ui/use-speech'
+import { Modal } from '@/shared/ui/modal'
 import { getCurrentTwister, advanceSession, addRoundResult, isSessionComplete, calculateAccuracy, saveSession } from '@/entities/session'
 import { GameHud } from './game-hud'
 import styles from './game-session.module.scss'
@@ -62,9 +63,10 @@ const [autoCheckDelay] = useState(DEFAULT_AUTO_CHECK_DELAY)
   const [elapsedTime, setElapsedTime] = useState(0)
   const [gameStartTime, setGameStartTime] = useState<number | null>(null)
   const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null)
-  const [isPaused, setIsPaused] = useState(false)
+const [isPaused, setIsPaused] = useState(false)
   const [pauseStartTime, setPauseStartTime] = useState<number | null>(null)
   const [totalPausedTime, setTotalPausedTime] = useState(0)
+  const [showSkipModal, setShowSkipModal] = useState(false)
 const autoCheckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const wasListeningRef = useRef(false)
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -133,7 +135,9 @@ const autoCheckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     checkMicPermission()
   }, [])
 
-  const handleNext = useCallback(() => {
+const handleNext = useCallback((sessionToUse?: Session) => {
+    const sessionToAdvance = sessionToUse ?? session
+
     if (!currentTwister) return
 
     setScoringResult(null)
@@ -142,8 +146,8 @@ const autoCheckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
       clearTimeout(autoCheckTimerRef.current)
     }
 
-setTimeout(() => {
-      const nextSession = advanceSession(session)
+    setTimeout(() => {
+      const nextSession = advanceSession(sessionToAdvance)
 
       if (isSessionComplete(nextSession)) {
         const accuracy = calculateAccuracy(nextSession)
@@ -155,6 +159,23 @@ setTimeout(() => {
       }
     }, 500)
   }, [currentTwister, session, onComplete, onSessionChange])
+
+  const handleSkip = useCallback(() => {
+    if (!currentTwister) return
+
+    const result = scoreTwister('', currentTwister.text)
+    result.isMatch = false
+    result.similarity = 0
+    setScoringResult(result)
+
+    const newSession = addRoundResult(session, { twisterId: currentTwister.id, similarity: 0 })
+    setSession(newSession)
+    onSessionChange(newSession)
+    saveSession(newSession)
+
+    setShowSkipModal(false)
+    handleNext(newSession)
+  }, [currentTwister, session, onSessionChange, handleNext])
 
   useEffect(() => {
     if (scoringResult?.isMatch) {
@@ -271,25 +292,37 @@ useEffect(() => {
                 </button>
               )}
 
-              {scoringResult && !scoringResult.isMatch && (
-                <button className={styles.nextButton} onClick={handleNext}>
-                  Skip
-                </button>
-              )}
+              <button className={styles.skipButton} onClick={() => setShowSkipModal(true)}>
+                Skip
+              </button>
             </div>
           </div>
 
-          {isPaused && (
-            <div className={styles.pauseOverlay}>
-              <div className={styles.pauseModal}>
-                <h2>Game Paused</h2>
-                <p>Take a break! Click resume when you're ready to continue.</p>
-                <button className={styles.resumeButton} onClick={handleResume}>
-                  Resume Game
-                </button>
-              </div>
-            </div>
+{isPaused && (
+            <Modal
+              isOpen={isPaused}
+              onClose={() => {}}
+              title="Game Paused"
+              confirmLabel="Resume Game"
+              cancelLabel=""
+              onConfirm={handleResume}
+            >
+              <p>Take a break! Click resume when you're ready to continue.</p>
+            </Modal>
           )}
+
+          <Modal
+            isOpen={showSkipModal}
+            onClose={() => setShowSkipModal(false)}
+            title="Skip Round?"
+            confirmLabel="Skip"
+            cancelLabel="Continue Playing"
+            onConfirm={handleSkip}
+            confirmVariant="danger"
+          >
+            <p>Are you sure you want to skip this round?</p>
+            <p style={{ marginTop: '8px', fontWeight: 500 }}>Skipping will count as a 0% match and will affect your final accuracy score.</p>
+          </Modal>
         </>
       )}
     </div>

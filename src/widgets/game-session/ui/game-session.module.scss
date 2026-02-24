@@ -124,7 +124,8 @@
 
 .micButton,
 .checkButton,
-.nextButton {
+.nextButton,
+.skipButton {
   padding: $spacing-md $spacing-xl;
   border-radius: $radius-lg;
   font-size: 1rem;
@@ -163,6 +164,20 @@
 .nextButton {
   background: $color-text-muted;
   color: white;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.skipButton {
+  background: $color-warning;
+  color: white;
+  padding: $spacing-md $spacing-xl;
+  border-radius: $radius-lg;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all $transition-fast;
 
   &:hover {
     opacity: 0.9;

@@ -108,7 +108,13 @@ export function HomePage() {
               className={`${styles.textInput} ${styles.primaryInput}`}
               placeholder="e.g. Marvel Superheroes, Lord of the Rings, 80s Music..."
               value={customTopic}
-              onChange={(e) => setCustomTopic(e.target.value)}
+              onChange={(e) => {
+                setCustomTopic(e.target.value)
+                if (e.target.value) {
+                  setSelectedTopic('')
+                  setUseCustomTopic(true)
+                }
+              }}
             />
             <span className={styles.hintText}>
               or select a preset below
