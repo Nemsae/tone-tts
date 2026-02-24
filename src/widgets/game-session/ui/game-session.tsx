@@ -79,7 +79,7 @@ const autoCheckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const elapsedTimeRef = useRef(0)
 
-  const { isListening, transcript, error, startListening, stopListening } = useSpeech()
+  const { isListening, transcript, error, startListening, stopListening, clearTranscript } = useSpeech()
 
   const currentTwister = getCurrentTwister(session)
 
@@ -148,10 +148,14 @@ const handleNext = useCallback((sessionToUse?: Session) => {
     if (!currentTwister) return
 
     setScoringResult(null)
+    setLiveMatchedWords(undefined)
+    setLiveWordsAttempted(undefined)
     wasListeningRef.current = false
     if (autoCheckTimerRef.current) {
       clearTimeout(autoCheckTimerRef.current)
     }
+
+    clearTranscript()
 
     setTimeout(() => {
       const nextSession = advanceSession(sessionToAdvance)
@@ -165,7 +169,7 @@ const handleNext = useCallback((sessionToUse?: Session) => {
         saveSession(nextSession)
       }
     }, 500)
-  }, [currentTwister, session, onComplete, onSessionChange])
+  }, [currentTwister, session, onComplete, onSessionChange, clearTranscript])
 
   const handleSkip = useCallback(() => {
     if (!currentTwister) return
@@ -193,7 +197,7 @@ const handleNext = useCallback((sessionToUse?: Session) => {
     }
   }, [scoringResult, handleNext])
 
-useEffect(() => {
+  useEffect(() => {
     if (gameStarted && gameStartTime && !isPaused) {
       timerIntervalRef.current = setInterval(() => {
         const currentTime = Date.now()

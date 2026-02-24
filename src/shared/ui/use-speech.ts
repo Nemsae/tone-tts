@@ -17,6 +17,7 @@ export interface UseSpeechResult {
   stopListening: () => void
   clearError: () => void
   restartRecognition: () => void
+  clearTranscript: () => void
 }
 
 const isSpeechSupported = typeof window !== 'undefined' && 
@@ -156,6 +157,10 @@ export function useSpeech(): UseSpeechResult {
     setError(null)
   }, [])
 
+  const clearTranscript = useCallback(() => {
+    setTranscript('')
+  }, [])
+
   return {
     isSupported,
     isListening,
@@ -165,5 +170,6 @@ export function useSpeech(): UseSpeechResult {
     stopListening,
     clearError,
     restartRecognition,
+    clearTranscript,
   }
 }
