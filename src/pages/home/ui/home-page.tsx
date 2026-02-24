@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { generateAITwisters, isApiKeyConfigured, type PredefinedTopic } from '@/features/twister-generator'
 import { createSession, saveSession, type GameSettings } from '@/entities/session'
 import { useGameFlow } from '@/entities/session'
 import type { TwisterLength } from '@/shared/vendor'
-import styles from '../home.module.scss'
+import styles from './home.module.scss'
 
 const PREDEFINED_TOPICS = ['Animals', 'Tech', 'Food'] as const
-const LENGTH_OPTIONS: { value: TwisterLength; label: string; words: string }[] = [
-  { value: 'short', label: 'Short', words: '~5 words' },
+const DIFFICULTY_OPTIONS: { value: TwisterLength; label: string; words: string }[] = [
+  { value: 'short', label: 'Easy', words: '~5 words' },
   { value: 'medium', label: 'Medium', words: '~10 words' },
-  { value: 'long', label: 'Long', words: '~20 words' },
+  { value: 'long', label: 'Hard', words: '~20 words' },
   { value: 'custom', label: 'Custom', words: '5-40 words' },
 ]
 const ROUND_MIN = 1
@@ -21,11 +21,18 @@ export function HomePage() {
   const gameFlow = useGameFlow()
   const [selectedTopic, setSelectedTopic] = useState<PredefinedTopic | ''>('')
   const [customTopic, setCustomTopic] = useState('')
-  const [useCustomTopic, setUseCustomTopic] = useState(false)
+  const [useCustomTopic, setUseCustomTopic] = useState(true)
   const [length, setLength] = useState<TwisterLength>('medium')
   const [customLength, setCustomLength] = useState(10)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const customTopicInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (useCustomTopic && customTopicInputRef.current) {
+      customTopicInputRef.current.focus()
+    }
+  }, [useCustomTopic])
 
   const handleStartGame = async () => {
     const topic = useCustomTopic ? customTopic : selectedTopic
@@ -40,7 +47,7 @@ export function HomePage() {
     }
 
     if (length === 'custom' && (customLength < 5 || customLength > 40)) {
-      setError('Custom length must be between 5 and 40 words')
+      setError('Custom difficulty must be between 5 and 40 words')
       return
     }
 
@@ -88,11 +95,24 @@ export function HomePage() {
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Theme</h2>
+          <div className={styles.customTopicSection}>
+            <input
+              ref={customTopicInputRef}
+              type="text"
+              className={`${styles.textInput} ${styles.primaryInput}`}
+              placeholder="e.g. Marvel Superheroes, Lord of the Rings, 80s Music..."
+              value={customTopic}
+              onChange={(e) => setCustomTopic(e.target.value)}
+            />
+            <span className={styles.hintText}>
+              or select a preset below
+            </span>
+          </div>
           <div className={styles.topicGrid}>
             {PREDEFINED_TOPICS.map((topic) => (
               <button
                 key={topic}
-                className={`${styles.topicButton} ${selectedTopic === topic && !useCustomTopic ? styles.selected : ''}`}
+                className={`${styles.topicButton} ${styles.secondaryButton} ${selectedTopic === topic && !useCustomTopic ? styles.selected : ''}`}
                 onClick={() => {
                   setSelectedTopic(topic)
                   setUseCustomTopic(false)
@@ -102,31 +122,12 @@ export function HomePage() {
               </button>
             ))}
           </div>
-          <div className={styles.customTopicRow}>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={useCustomTopic}
-                onChange={(e) => setUseCustomTopic(e.target.checked)}
-              />
-              Custom Theme
-            </label>
-            {useCustomTopic && (
-              <input
-                type="text"
-                className={styles.textInput}
-                placeholder="Enter your own custom theme here"
-                value={customTopic}
-                onChange={(e) => setCustomTopic(e.target.value)}
-              />
-            )}
-          </div>
         </div>
 
         <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Length</h2>
+          <h2 className={styles.sectionTitle}>Difficulty</h2>
           <div className={styles.lengthGrid}>
-            {LENGTH_OPTIONS.map((option) => (
+            {DIFFICULTY_OPTIONS.map((option) => (
               <button
                 key={option.value}
                 className={`${styles.lengthButton} ${length === option.value ? styles.selected : ''}`}
@@ -176,14 +177,6 @@ export function HomePage() {
           disabled={isLoading}
         >
           {isLoading ? 'Generating...' : 'Start Game'}
-        </button>
-
-        <button
-          className={styles.startButton}
-          onClick={() => navigate('/practice')}
-          style={{ marginTop: '1rem', background: '#6B7280' }}
-        >
-          Practice Mode
         </button>
       </div>
     </div>

@@ -1,0 +1,53 @@
+@use '../../../app/styles/variables' as *;
+
+.hud {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg;
+  width: 100%;
+  max-width: 600px;
+}
+
+.timerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-lg $spacing-2xl;
+  background: $color-primary;
+  border-radius: $radius-xl;
+  color: white;
+}
+
+.timerLabel {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.9;
+}
+
+.timerValue {
+  font-size: 3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-xl;
+  width: 100%;
+}
+
+.round {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $color-text-muted;
+}
+
+.accuracy {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $color-primary;
+}

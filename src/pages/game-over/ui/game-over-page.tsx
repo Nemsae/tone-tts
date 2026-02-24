@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loadFinalResult, clearFinalResult, type FinalResult } from '@/entities/session'
-import styles from '../game-over.module.scss'
+import styles from './game-over.module.scss'
 
 function formatTime(ms: number): string {
   const seconds = Math.floor(ms / 1000)

@@ -5,6 +5,8 @@ const PERMISSION_ERROR_MESSAGE =
   'Microphone permission is blocked. You can keep playing with keyboard fallback.'
 const NETWORK_ERROR_MESSAGE =
   'No internet connection. Speech recognition requires internet to work.'
+const NO_SPEECH_ERROR_MESSAGE =
+  'No speech detected. Please try speaking again.'
 
 export interface UseSpeechResult {
   isSupported: boolean
@@ -58,6 +60,8 @@ const createRecognitionHandlers = (
       setError(PERMISSION_ERROR_MESSAGE)
     } else if (event.error === 'network') {
       setError(NETWORK_ERROR_MESSAGE)
+    } else if (event.error === 'no-speech') {
+      setError(NO_SPEECH_ERROR_MESSAGE)
     } else {
       setError(`Speech recognition error: ${event.error}.`)
     }
