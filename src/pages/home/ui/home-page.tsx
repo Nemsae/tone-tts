@@ -129,6 +129,7 @@ export function HomePage() {
                 onClick={() => {
                   setSelectedTopic(topic);
                   setUseCustomTopic(false);
+                  setCustomTopic('');
                 }}
               >
                 {topic}

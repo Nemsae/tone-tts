@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'variables.scss';
 
 *,
@@ -94,7 +95,7 @@ textarea {
   color: variables.$color-text;
 
   &:hover {
-    background-color: darken(variables.$color-bg-secondary, 5%);
+    background-color: color.adjust(variables.$color-bg-secondary, $lightness: -5%);
   }
 }
 
@@ -103,7 +104,7 @@ textarea {
   color: white;
 
   &:hover {
-    background-color: darken(variables.$color-primary, 10%);
+    background-color: color.adjust(variables.$color-primary, $lightness: -10%);
   }
 }
 
@@ -112,7 +113,7 @@ textarea {
   color: white;
 
   &:hover {
-    background-color: darken(#dc3545, 10%);
+    background-color: color.adjust(#dc3545, $lightness: -10%);
   }
 }
 
