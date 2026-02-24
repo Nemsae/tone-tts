@@ -25,7 +25,7 @@ Code is organized into layers, ordered from **highest to lowest**. A module may 
 
 ## 2. Structure: Slices & Segments
 
-Except for the **Shared** layer, every layer contains **Slices** (functional domains). Each slice is then broken down into **Segments**.
+Except for the **APP** and **Shared** layer, every layer contains **Slices** (functional domains). Each slice is then broken down into **Segments**.
 
 ### Slice Rules
 
@@ -64,7 +64,7 @@ Every Slice and Segment must have an `index.ts` file acting as its Public API.
 
 Strict Rules for Agent
 
-Slices: Do not cross-import. features can import entities and shared, but entities cannot import features.
+Slices: Do not cross-import.
 
 Public API: Each slice must have an index.ts file exposing only what is necessary.
 
