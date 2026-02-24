@@ -15,8 +15,7 @@
   align-items: center;
   gap: $spacing-xs;
   padding: $spacing-lg $spacing-2xl;
-  background: $color-primary;
-  border-radius: $radius-xl;
+  background: #000000;
   color: white;
 }
 
@@ -30,6 +29,7 @@
 .timerValue {
   font-size: 3rem;
   font-weight: 700;
+  font-family: $font-family-bold;
   font-variant-numeric: tabular-nums;
 }
 
@@ -42,12 +42,12 @@
 
 .round {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   color: $color-text-muted;
 }
 
 .accuracy {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   color: $color-primary;
 }

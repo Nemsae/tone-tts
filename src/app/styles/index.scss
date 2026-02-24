@@ -1,6 +1,22 @@
 @use 'sass:color';
 @use 'variables.scss';
 
+@font-face {
+  font-family: 'PPMondwest-Regular';
+  src: url('../../assets/PPMondwest-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PPNeueBit-Bold';
+  src: url('../../assets/PPNeueBit-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -32,13 +48,33 @@ body {
 button {
   font-family: inherit;
   cursor: pointer;
-  border: none;
-  background: none;
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 700;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
 }
 
 input,
 textarea {
   font-family: inherit;
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+
+  &:focus {
+    outline: none;
+    background: #f0f0f0;
+  }
 }
 
 .modal-backdrop {
@@ -47,7 +83,7 @@ textarea {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,17 +93,18 @@ textarea {
 
 .modal-content {
   background-color: variables.$color-bg;
-  border-radius: 12px;
+  border: 2px solid #000000;
   padding: 24px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 8px 8px 0 #000000;
   animation: slideUp 0.2s ease-out;
 }
 
 .modal-title {
   font-size: 1.25rem;
   margin-bottom: 16px;
+  font-weight: 700;
   color: variables.$color-text;
 }
 
@@ -84,18 +121,18 @@ textarea {
 
 .modal-btn {
   padding: 10px 20px;
-  border-radius: 8px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 700;
   transition: all 0.2s ease;
 }
 
 .modal-btn-cancel {
-  background-color: variables.$color-bg-secondary;
+  background-color: variables.$color-bg;
   color: variables.$color-text;
 
   &:hover {
-    background-color: color.adjust(variables.$color-bg-secondary, $lightness: -5%);
+    background-color: variables.$color-text;
+    color: variables.$color-bg;
   }
 }
 
@@ -109,11 +146,11 @@ textarea {
 }
 
 .modal-btn-danger {
-  background-color: #dc3545;
+  background-color: variables.$color-primary;
   color: white;
 
   &:hover {
-    background-color: color.adjust(#dc3545, $lightness: -10%);
+    background-color: #333333;
   }
 }
 

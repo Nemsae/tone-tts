@@ -371,8 +371,9 @@ export function GameSession({
             confirmVariant="danger"
           >
             <p>Are you sure you want to skip this round?</p>
-            <p style={{ marginTop: '8px', fontWeight: 500 }}>
-              Skipping will count as a 0% match and will affect your final accuracy score.
+            <p style={{ marginTop: '8px' }}>
+              Skipping will count as a <strong>0% match</strong> and will affect your final accuracy
+              score.
             </p>
           </Modal>
         </>

@@ -16,16 +16,17 @@
 .title {
   font-size: 2.5rem;
   font-weight: 700;
+  font-family: $font-family-bold;
   color: $color-text;
   margin-bottom: $spacing-xl;
 }
 
 .scoreCard {
   background: $color-surface;
-  border-radius: $radius-xl;
+  border: 2px solid #000000;
   padding: $spacing-2xl;
   margin-bottom: $spacing-xl;
-  box-shadow: $shadow-lg;
+  box-shadow: 8px 8px 0 #000000;
 }
 
 .scoreLabel {
@@ -37,6 +38,7 @@
 .scoreValue {
   font-size: 4rem;
   font-weight: 700;
+  font-family: $font-family-bold;
   color: $color-primary;
 }
 
@@ -60,9 +62,8 @@
 .playAgainButton,
 .homeButton {
   padding: $spacing-md $spacing-xl;
-  border-radius: $radius-lg;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   transition: all $transition-fast;
 }
 
@@ -72,6 +73,7 @@
 
   &:hover {
     background: $color-primary-dark;
+    box-shadow: 4px 4px 0 #000000;
   }
 }
 
@@ -81,6 +83,7 @@
   color: $color-text;
 
   &:hover {
-    border-color: $color-primary;
+    background: #000000;
+    color: #ffffff;
   }
 }

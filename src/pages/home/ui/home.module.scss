@@ -18,6 +18,7 @@
 .title {
   font-size: 2.5rem;
   font-weight: 700;
+  font-family: $font-family-bold;
   color: $color-text;
   margin-bottom: $spacing-sm;
 }
@@ -35,7 +36,7 @@
 
 .sectionTitle {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: $spacing-md;
   color: $color-text;
 }
@@ -50,21 +51,21 @@
   padding: $spacing-md $spacing-lg;
   background: $color-surface;
   border: 2px solid $color-border;
-  border-radius: $radius-lg;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   color: $color-text;
   transition: all $transition-fast;
 
   &:hover {
-    border-color: $color-primary;
-    background: rgba($color-primary, 0.05);
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
   }
 
   &.selected {
-    border-color: $color-primary;
-    background: rgba($color-primary, 0.1);
-    color: $color-primary;
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
   }
 
   &.secondaryButton {
@@ -73,15 +74,15 @@
     font-weight: 500;
 
     &:hover {
-      border-color: $color-primary;
-      background: rgba($color-primary, 0.05);
-      color: $color-text;
+      background: #000000;
+      color: #ffffff;
+      border-color: #000000;
     }
 
     &.selected {
-      border-color: $color-primary;
-      background: rgba($color-primary, 0.1);
-      color: $color-primary;
+      background: #000000;
+      color: #ffffff;
+      border-color: #000000;
     }
   }
 }
@@ -96,9 +97,8 @@
 .primaryInput {
   padding: $spacing-md $spacing-lg;
   border: 2px solid $color-primary;
-  border-radius: $radius-lg;
   font-size: 1rem;
-  background: rgba($color-primary, 0.05);
+  background: #ffffff;
   color: $color-text;
 
   &::placeholder {
@@ -108,7 +108,7 @@
   &:focus {
     outline: none;
     border-color: $color-primary;
-    box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+    background: #f0f0f0;
   }
 }
 
@@ -122,8 +122,7 @@
   flex: 1;
   min-width: 150px;
   padding: $spacing-sm $spacing-md;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+  border: 2px solid $color-border;
   font-size: 0.875rem;
   background: $color-surface;
   color: $color-text;
@@ -144,7 +143,6 @@
   padding: $spacing-md;
   background: $color-surface;
   border: 2px solid $color-border;
-  border-radius: $radius-lg;
   transition: all $transition-fast;
   display: flex;
   flex-direction: column;
@@ -152,19 +150,31 @@
   gap: $spacing-xs;
 
   &:hover {
-    border-color: $color-primary;
-    background: rgba($color-primary, 0.05);
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
+
+    .lengthLabel,
+    .lengthWords {
+      color: #ffffff;
+    }
   }
 
   &.selected {
-    border-color: $color-primary;
-    background: rgba($color-primary, 0.1);
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
+
+    .lengthLabel,
+    .lengthWords {
+      color: #ffffff;
+    }
   }
 }
 
 .lengthLabel {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   color: $color-text;
 }
 
@@ -189,8 +199,7 @@
 .numberInput {
   width: 80px;
   padding: $spacing-sm;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+  border: 2px solid $color-border;
   font-size: 0.875rem;
   background: $color-surface;
   color: $color-text;
@@ -205,7 +214,6 @@
 .rangeInput {
   width: 100%;
   height: 8px;
-  border-radius: $radius-md;
   background: $color-border;
   appearance: none;
   cursor: pointer;
@@ -214,7 +222,6 @@
     appearance: none;
     width: 24px;
     height: 24px;
-    border-radius: 50%;
     background: $color-primary;
     cursor: pointer;
   }
@@ -230,10 +237,9 @@
 
 .error {
   padding: $spacing-md;
-  background: rgba(red, 0.1);
-  border: 1px solid red;
-  border-radius: $radius-md;
-  color: red;
+  background: #ffffff;
+  border: 2px solid #000000;
+  color: #000000;
   font-size: 0.875rem;
   margin-bottom: $spacing-lg;
 }
@@ -241,9 +247,9 @@
 .startButton {
   width: 100%;
   padding: $spacing-lg $spacing-2xl;
-  background: $color-primary;
-  border: none;
-  border-radius: $radius-lg;
+  background: #000000;
+  border: 2px solid #000000;
+  border-radius: 0;
   font-size: 1.25rem;
   font-weight: 700;
   color: white;
@@ -252,7 +258,7 @@
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba($color-primary, 0.3);
+    box-shadow: 4px 4px 0 #000000;
   }
 
   &:disabled {
