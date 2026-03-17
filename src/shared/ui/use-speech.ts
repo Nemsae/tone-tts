@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { writable, get } from 'svelte/store';
 
 const UNSUPPORTED_ERROR_MESSAGE = 'Speech recognition is not supported in this browser.';
 const PERMISSION_ERROR_MESSAGE =
@@ -7,169 +7,166 @@ const NETWORK_ERROR_MESSAGE =
   'No internet connection. Speech recognition requires internet to work.';
 const NO_SPEECH_ERROR_MESSAGE = 'No speech detected. Please try speaking again.';
 
-export interface UseSpeechResult {
+interface SpeechState {
   isSupported: boolean;
   isListening: boolean;
   transcript: string;
   error: string | null;
-  startListening: () => void;
-  stopListening: () => void;
-  clearError: () => void;
-  restartRecognition: () => void;
-  clearTranscript: () => void;
 }
 
 const isSpeechSupported =
   typeof window !== 'undefined' &&
   (window.SpeechRecognition !== undefined || window.webkitSpeechRecognition !== undefined);
 
-const INITIAL_ERROR = isSpeechSupported ? null : UNSUPPORTED_ERROR_MESSAGE;
+function createSpeechStore() {
+  const { subscribe, set, update } = writable<SpeechState>({
+    isSupported: isSpeechSupported,
+    isListening: false,
+    transcript: '',
+    error: isSpeechSupported ? null : UNSUPPORTED_ERROR_MESSAGE,
+  });
 
-const createRecognition = (
-  onresult: (event: SpeechRecognitionEvent) => void,
-  onerror: (event: SpeechRecognitionErrorEvent) => void,
-  onend: () => void
-): SpeechRecognition => {
-  const RecognitionConstructor = window.SpeechRecognition ?? window.webkitSpeechRecognition;
-  const recognition = new RecognitionConstructor();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
-  recognition.maxAlternatives = 1;
-  recognition.onresult = onresult;
-  recognition.onerror = onerror;
-  recognition.onend = onend;
-  return recognition;
-};
+  let recognition: SpeechRecognition | null = null;
 
-const createRecognitionHandlers = (
-  setTranscript: (transcript: string) => void,
-  setError: (error: string | null) => void,
-  setIsListening: (listening: boolean) => void
-) => {
-  const onresult = (event: SpeechRecognitionEvent) => {
-    const chunks: string[] = [];
-    for (let index = event.resultIndex; index < event.results.length; index += 1) {
-      chunks.push(event.results[index][0].transcript);
-    }
-    setTranscript(chunks.join(' ').trim());
-  };
-
-  const onerror = (event: SpeechRecognitionErrorEvent) => {
-    console.error('Speech recognition error:', event, event.error);
-    if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-      setError(PERMISSION_ERROR_MESSAGE);
-    } else if (event.error === 'network') {
-      setError(NETWORK_ERROR_MESSAGE);
-    } else if (event.error === 'no-speech') {
-      setError(NO_SPEECH_ERROR_MESSAGE);
-    } else {
-      setError(`Speech recognition error: ${event.error}.`);
-    }
-    setIsListening(false);
-  };
-
-  const onend = () => {
-    setIsListening(false);
-  };
-
-  return { onresult, onerror, onend };
-};
-
-export function useSpeech(): UseSpeechResult {
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const isSupported = isSpeechSupported;
-  const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
-  const [error, setError] = useState<string | null>(INITIAL_ERROR);
-
-  useEffect(() => {
-    if (!isSpeechSupported) {
-      return;
-    }
-
-    const handlers = createRecognitionHandlers(setTranscript, setError, setIsListening);
-    const recognition = createRecognition(handlers.onresult, handlers.onerror, handlers.onend);
-
-    recognitionRef.current = recognition;
-
-    return () => {
-      recognition.stop();
-      recognitionRef.current = null;
+  function createRecognitionHandlers() {
+    return {
+      onresult: (event: SpeechRecognitionEvent) => {
+        const chunks: string[] = [];
+        for (let index = event.resultIndex; index < event.results.length; index += 1) {
+          chunks.push(event.results[index][0].transcript);
+        }
+        update((state) => ({ ...state, transcript: chunks.join(' ').trim() }));
+      },
+      onerror: (event: SpeechRecognitionErrorEvent) => {
+        console.error('Speech recognition error:', event, event.error);
+        let errorMsg = '';
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+          errorMsg = PERMISSION_ERROR_MESSAGE;
+        } else if (event.error === 'network') {
+          errorMsg = NETWORK_ERROR_MESSAGE;
+        } else if (event.error === 'no-speech') {
+          errorMsg = NO_SPEECH_ERROR_MESSAGE;
+        } else {
+          errorMsg = `Speech recognition error: ${event.error}.`;
+        }
+        update((state) => ({ ...state, error: errorMsg, isListening: false }));
+      },
+      onend: () => {
+        update((state) => ({ ...state, isListening: false }));
+      },
     };
-  }, []);
+  }
 
-  const startListening = useCallback(() => {
-    const recognition = recognitionRef.current;
-
-    if (recognition === null) {
-      setError(UNSUPPORTED_ERROR_MESSAGE);
+  function init() {
+    if (!isSpeechSupported) {
       return;
     }
 
-    setError(null);
+    const handlers = createRecognitionHandlers();
+    const RecognitionConstructor = window.SpeechRecognition ?? window.webkitSpeechRecognition;
+    recognition = new RecognitionConstructor();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
+    recognition.onresult = handlers.onresult;
+    recognition.onerror = handlers.onerror;
+    recognition.onend = handlers.onend;
+  }
+
+  function startListening() {
+    if (recognition === null) {
+      update((state) => ({ ...state, error: UNSUPPORTED_ERROR_MESSAGE }));
+      return;
+    }
+
+    update((state) => ({ ...state, error: null }));
 
     try {
       recognition.start();
-      setIsListening(true);
+      update((state) => ({ ...state, isListening: true }));
     } catch (startError) {
       if (startError instanceof DOMException && startError.name === 'InvalidStateError') {
         return;
       }
 
-      setError('Could not start microphone capture. Please try again.');
-      setIsListening(false);
+      update((state) => ({
+        ...state,
+        error: 'Could not start microphone capture. Please try again.',
+        isListening: false,
+      }));
     }
-  }, []);
+  }
 
-  const stopListening = useCallback(() => {
-    recognitionRef.current?.stop();
-    setIsListening(false);
-  }, []);
+  function stopListening() {
+    recognition?.stop();
+    update((state) => ({ ...state, isListening: false }));
+  }
 
-  const restartRecognition = useCallback(() => {
-    recognitionRef.current?.stop();
-    setTranscript('');
-    setIsListening(false);
-    setError(null);
+  function restartRecognition() {
+    recognition?.stop();
+    update((state) => ({ ...state, transcript: '', isListening: false, error: null }));
 
     if (!isSpeechSupported) {
       return;
     }
 
-    const handlers = createRecognitionHandlers(setTranscript, setError, setIsListening);
-    const recognition = createRecognition(handlers.onresult, handlers.onerror, handlers.onend);
-    recognitionRef.current = recognition;
+    const handlers = createRecognitionHandlers();
+    const RecognitionConstructor = window.SpeechRecognition ?? window.webkitSpeechRecognition;
+    recognition = new RecognitionConstructor();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
+    recognition.onresult = handlers.onresult;
+    recognition.onerror = handlers.onerror;
+    recognition.onend = handlers.onend;
 
     try {
       recognition.start();
-      setIsListening(true);
+      update((state) => ({ ...state, isListening: true }));
     } catch (startError) {
       if (startError instanceof DOMException && startError.name === 'InvalidStateError') {
         return;
       }
-      setError('Could not start microphone capture. Please try again.');
-      setIsListening(false);
+      update((state) => ({
+        ...state,
+        error: 'Could not start microphone capture. Please try again.',
+        isListening: false,
+      }));
     }
-  }, []);
+  }
 
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
+  function clearError() {
+    update((state) => ({ ...state, error: null }));
+  }
 
-  const clearTranscript = useCallback(() => {
-    setTranscript('');
-  }, []);
+  function clearTranscript() {
+    update((state) => ({ ...state, transcript: '' }));
+  }
+
+  init();
 
   return {
-    isSupported,
-    isListening,
-    transcript,
-    error,
+    subscribe,
+    get isSupported() {
+      return get({ subscribe }).isSupported;
+    },
+    get isListening() {
+      return get({ subscribe }).isListening;
+    },
+    get transcript() {
+      return get({ subscribe }).transcript;
+    },
+    get error() {
+      return get({ subscribe }).error;
+    },
     startListening,
     stopListening,
-    clearError,
     restartRecognition,
+    clearError,
     clearTranscript,
   };
 }
+
+export const speechStore = createSpeechStore();

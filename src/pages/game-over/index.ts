@@ -1,1 +1,1 @@
-export { GameOverPage } from './ui/game-over-page';
+export { default as GameOverPage } from './ui/GameOverPage.svelte';

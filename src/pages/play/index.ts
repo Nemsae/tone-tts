@@ -1,1 +1,1 @@
-export { PlayPage } from './ui/play-page';
+export { default as PlayPage } from './ui/PlayPage.svelte';

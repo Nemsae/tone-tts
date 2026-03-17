@@ -1,1 +1,1 @@
-export { GameSession } from './ui/game-session';
+export { default as GameSession } from './ui/GameSession.svelte';
