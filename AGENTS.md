@@ -37,3 +37,5 @@ Public APIs: Every slice (e.g., a specific feature or entity) MUST have an index
 Always ensure `npm run lint:all` passes with final edits/changes.
 
 Do NOT add/modify/remove any lint rules if the checks fail. Fix the issue instead.
+
+Refer to INSTRUCTIONS_FOR_MULTIPLAYER_INTEGRATION.md for details around the multiplayer refactor tasks. Generate task list using details of this file.
