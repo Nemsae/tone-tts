@@ -1,5 +1,5 @@
 import type { Twister, TwisterLength } from '@/shared/vendor';
-import { calculateSimilarity } from '@/shared/lib/string-utils';
+import { calculateSimilarity } from '@/shared/lib';
 
 export interface GameSettings {
   topic: string;

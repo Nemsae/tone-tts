@@ -3,8 +3,7 @@
   import { onMount } from 'svelte';
   import type { Session, ScoringResult } from '@/entities/session';
   import { scoreTwister, getCurrentTwister, advanceSession, addRoundResult, isSessionComplete, calculateAccuracy, saveSession, loadSession, clearSession, saveFinalResult } from '@/entities/session';
-  import { speechStore } from '@/shared/ui/use-speech';
-  import { Modal } from '@/shared/ui';
+  import { speechStore, Modal } from '@/shared/ui';
   import GameHud from './GameHud.svelte';
   import TwisterCard from './TwisterCard.svelte';
   import styles from './game-session.module.scss';

@@ -35,3 +35,5 @@ Cross-Slice Imports: Slices on the same layer cannot import each other directly 
 Public APIs: Every slice (e.g., a specific feature or entity) MUST have an index.ts file that exports its public API. External modules must only import from this index.ts.
 
 Always ensure `npm run lint:all` passes with final edits/changes.
+
+Do NOT add/modify/remove any lint rules if the checks fail. Fix the issue instead.

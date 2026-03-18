@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fsd": "steiger ./src",
     "lint:all": "npm run lint && npm run lint:fsd && npm run typecheck && npm run format:check",
-    "typecheck": "tsc",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
