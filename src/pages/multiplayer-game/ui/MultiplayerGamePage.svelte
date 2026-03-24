@@ -7,6 +7,7 @@
   import styles from './multiplayer-game.module.scss';
 
   const ROUND_DURATION = 30000;
+  const AUTO_CHECK_DELAY = 1500;
 
   let elapsedTime = $state(0);
   let roundStartTime = $state<number | null>(null);
@@ -22,16 +23,10 @@
   let leaderboard = $state<LeaderboardEntry[]>([]);
   let gameStarted = $state(false);
 
+  let speechState = $state({ isListening: false, transcript: '', error: null as string | null });
+  let autoCheckTimer: ReturnType<typeof setTimeout> | null = null;
+
   const socket = socketService.connect();
-
-  const isListening = $derived(speechStore.isListening);
-  const transcript = $derived(speechStore.transcript);
-  const startListening = speechStore.startListening;
-  const stopListening = speechStore.stopListening;
-  const clearTranscript = speechStore.clearTranscript;
-
-  let timerInterval: ReturnType<typeof setInterval> | null = null;
-  let gameStartTime = $state<number | null>(null);
 
   onMount(() => {
     const store = $multiplayerGameStore;
@@ -41,10 +36,14 @@
     gameStatus = store.game?.status ?? 'playing';
     isHost = store.player?.isHost ?? false;
 
+    const unsubscribe = speechStore.subscribe((state) => {
+      speechState = state;
+    });
+
     if (store.game?.status === 'playing') {
       gameStarted = true;
       startGameTimer();
-      startListening();
+      speechStore.startListening();
     }
 
     socket.on('game-started', (data: { game: any; currentTwister: Twister; roundStartTime: number }) => {
@@ -52,9 +51,11 @@
       roundStartTime = data.roundStartTime;
       gameStatus = 'playing';
       gameStarted = true;
+      hasSubmitted = false;
+      mySimilarity = null;
       multiplayerGameStore.handleGameStarted(data);
       startGameTimer();
-      startListening();
+      speechStore.startListening();
     });
 
     socket.on('player-submitted', (data: { playerId: string; similarity: number }) => {
@@ -68,30 +69,29 @@
       hasSubmitted = false;
       mySimilarity = null;
       multiplayerGameStore.handleRoundAdvanced(data);
-      clearTranscript();
-      if (isListening) {
-        stopListening();
-      }
-      startListening();
+      speechStore.stopListening();
+      speechStore.clearTranscript();
+      speechState = { ...speechState, isListening: false, transcript: '' };
+      speechStore.startListening();
     });
 
     socket.on('game-paused', (data: { pausedAt: number; pausedBy: string }) => {
       gameStatus = 'paused';
       multiplayerGameStore.handleGamePaused(data);
-      stopListening();
+      speechStore.stopListening();
     });
 
     socket.on('game-resumed', (data: { resumedAt: number; totalPausedTime: number }) => {
       gameStatus = 'playing';
       multiplayerGameStore.handleGameResumed(data);
-      startListening();
+      speechStore.startListening();
     });
 
     socket.on('game-ended', (data: { leaderboard: LeaderboardEntry[] }) => {
       gameStatus = 'game-over';
       leaderboard = data.leaderboard;
       multiplayerGameStore.handleGameEnded(data);
-      stopListening();
+      speechStore.stopListening();
       push('/multiplayer-result');
     });
 
@@ -101,9 +101,16 @@
     });
 
     checkMicPermission();
+
+    return () => {
+      unsubscribe();
+    };
   });
 
   onDestroy(() => {
+    if (autoCheckTimer) {
+      clearTimeout(autoCheckTimer);
+    }
     if (timerInterval) {
       clearInterval(timerInterval);
     }
@@ -114,8 +121,11 @@
     socket.off('game-resumed');
     socket.off('game-ended');
     socket.off('player-left');
-    stopListening();
+    speechStore.stopListening();
   });
+
+  let timerInterval: ReturnType<typeof setInterval> | null = null;
+  let gameStartTime = $state<number | null>(null);
 
   function checkMicPermission() {
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -141,10 +151,10 @@
   }
 
   function handleSubmit() {
-    if (!transcript || hasSubmitted) return;
+    if (!speechState.transcript || hasSubmitted) return;
 
     socket.emit('submit-answer', {
-      transcript,
+      transcript: speechState.transcript,
       timestamp: Date.now()
     }, (response: any) => {
       if (response.success) {
@@ -191,11 +201,25 @@
   }
 
   $effect(() => {
-    if (gameStatus === 'playing' && !hasSubmitted && transcript && isListening) {
-      const similarity = Math.random() * 30 + 70;
-      if (similarity > 80) {
-        handleSubmit();
+    const currentSpeechState = speechState;
+    const listening = currentSpeechState.isListening;
+    const text = currentSpeechState.transcript;
+
+    if (!listening) {
+      if (autoCheckTimer) {
+        clearTimeout(autoCheckTimer);
+        autoCheckTimer = null;
       }
+      return;
+    }
+
+    if (text && !hasSubmitted) {
+      if (autoCheckTimer) {
+        clearTimeout(autoCheckTimer);
+      }
+      autoCheckTimer = setTimeout(() => {
+        handleSubmit();
+      }, AUTO_CHECK_DELAY);
     }
   });
 </script>
@@ -259,11 +283,11 @@
 
       <div class={styles.controls}>
         <div class={styles.transcript}>
-          {transcript || (isListening ? 'Listening...' : 'Press the button and speak')}
+          {speechState.transcript || (speechState.isListening ? 'Listening...' : 'Press the button and speak')}
         </div>
 
-        {#if error}
-          <div class={styles.error}>{error}</div>
+        {#if speechState.error}
+          <div class={styles.error}>{speechState.error}</div>
         {/if}
 
         {#if hasSubmitted}
@@ -272,15 +296,15 @@
           </div>
         {:else}
           <div class={styles.buttons}>
-            {#if !isListening}
-              <button class={styles.micButton} onclick={startListening}>
+            {#if !speechState.isListening}
+              <button class={styles.micButton} onclick={() => speechStore.startListening()}>
                 Start Speaking
               </button>
             {:else}
-              <button class="{styles.micButton} {styles.listening}" onclick={stopListening}>
+              <button class="{styles.micButton} {styles.listening}" onclick={() => speechStore.stopListening()}>
                 Stop
               </button>
-              <button class={styles.submitButton} onclick={handleSubmit} disabled={!transcript}>
+              <button class={styles.submitButton} onclick={handleSubmit} disabled={!speechState.transcript}>
                 Submit Answer
               </button>
             {/if}
