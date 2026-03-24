@@ -1,0 +1,290 @@
+@use '../../../app/styles/variables' as *;
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xl;
+  background: #f9f9f9;
+
+  @media (max-width: 640px) {
+    padding: $spacing-lg;
+  }
+}
+
+.container {
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+}
+
+.header {
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 3.5rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: #1a1c1c;
+  margin-bottom: $spacing-sm;
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+.subtitle {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  color: #474747;
+  max-width: 28rem;
+  line-height: 1.6;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.sectionHeader {
+  padding-top: 0.5rem;
+}
+
+.sectionTitle {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #1a1c1c;
+  text-transform: lowercase;
+  margin-bottom: 0.25rem;
+}
+
+.sectionDescription {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #777777;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.topicGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.topicLabel {
+  cursor: pointer;
+}
+
+.topicRadio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.topicButton {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #474747;
+  border: 1px solid rgba(119, 119, 119, 0.2);
+  border-radius: 4px;
+  transition: all 150ms ease;
+  background: transparent;
+
+  &:hover {
+    background: #eeeeee;
+  }
+
+  .topicRadio:checked + & {
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
+  }
+}
+
+.customTopicInput {
+  width: 100%;
+  padding: 0.75rem 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #1a1c1c;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(119, 119, 119, 0.2);
+  transition: border-color 200ms ease;
+
+  &::placeholder {
+    color: #777777;
+  }
+
+  &:focus {
+    outline: none;
+    border-bottom-color: #000000;
+  }
+}
+
+.difficultyButtons {
+  display: flex;
+  background: #f3f3f3;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
+}
+
+.difficultyButton {
+  flex: 1;
+  padding: 0.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #474747;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+
+  &:hover {
+    color: #1a1c1c;
+  }
+
+  &.selected {
+    background: #ffffff;
+    color: #1a1c1c;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.customLengthRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.customLengthLabel,
+.customLengthValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #474747;
+}
+
+.customLengthValue {
+  color: #1a1c1c;
+  font-weight: 500;
+}
+
+.roundsRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.roundsLabel,
+.roundsValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #474747;
+}
+
+.roundsValue {
+  color: #1a1c1c;
+  font-weight: 500;
+}
+
+.rangeInput {
+  width: 100%;
+  height: 2px;
+  background: #e2e2e2;
+  appearance: none;
+  cursor: pointer;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #000000;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+}
+
+.rangeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.625rem;
+  color: #777777;
+  opacity: 0.5;
+}
+
+.error {
+  padding: $spacing-md;
+  background: #ffffff;
+  border: none;
+  border-left: 4px solid #ba1a1a;
+  color: #ba1a1a;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+}
+
+.ctaSection {
+  padding-top: 3rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 150ms ease;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.arrowIcon {
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-size: 1.25rem;
+  font-weight: normal;
+  font-style: normal;
+}

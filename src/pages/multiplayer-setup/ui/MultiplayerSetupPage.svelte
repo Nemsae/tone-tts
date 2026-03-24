@@ -2,18 +2,10 @@
   import { push } from 'svelte-spa-router';
   import { onMount, onDestroy } from 'svelte';
   import { socketService, multiplayerGameStore } from '@/shared/lib';
-  import { gameSettingsStore, PREDEFINED_TOPICS, type GameSettings } from '@/entities/session';
-  import type { TwisterLength } from '@/shared/vendor';
+  import { gameSettingsStore, type GameSettings } from '@/entities/session';
   import type { GameSettings as MultiplayerGameSettings, Player } from '@/shared/lib/multiplayer-types';
+  import { GameSettingsForm } from '@/widgets/game-settings-form';
   import styles from './multiplayer-setup.module.scss';
-
-  const DIFFICULTY_OPTIONS: { value: TwisterLength; label: string; words: string }[] = [
-    { value: 'short', label: 'Easy', words: '~5 words' },
-    { value: 'medium', label: 'Medium', words: '~10 words' },
-    { value: 'long', label: 'Hard', words: '~20 words' },
-  ];
-  const ROUND_MIN = 1;
-  const ROUND_MAX = 10;
 
   let step = $state<'setup' | 'lobby'>('setup');
   let playerName = $state('');
@@ -22,7 +14,6 @@
   let error = $state('');
   let roomCode = $state<string | null>(null);
   let players = $state<Player[]>([]);
-  let customTopicInput = $state('');
 
   const socket = socketService.connect();
 
@@ -126,83 +117,32 @@
         Back
       </button>
 
-      <h1 class={styles.title}>Create Multiplayer Game</h1>
-      <p class={styles.subtitle}>Set up your game room and invite friends</p>
-
-      <div class={styles.section}>
-        <h2 class={styles.sectionTitle}>Your Name</h2>
-        <input
-          type="text"
-          class={styles.textInput}
-          placeholder="Enter your name"
-          bind:value={playerName}
-        />
-      </div>
-
-      <div class={styles.section}>
-        <h2 class={styles.sectionTitle}>Theme</h2>
-        <div class={styles.customTopicSection}>
-          <input
-            type="text"
-            class="{styles.textInput} {styles.primaryInput}"
-            placeholder="e.g. Marvel Superheroes, Lord of the Rings..."
-            bind:value={customTopicInput}
-            oninput={() => {
-              gameSettingsStore.setCustomTopic(customTopicInput);
-            }}
-          />
-          <span class={styles.hintText}>or select a preset below</span>
-        </div>
-        <div class={styles.topicGrid}>
-          {#each PREDEFINED_TOPICS as topic}
-            <button
-              class="{styles.topicButton} {styles.secondaryButton} {$gameSettingsStore.selectedTopic === topic && !$gameSettingsStore.useCustomTopic ? styles.selected : ''}"
-              onclick={() => gameSettingsStore.setSelectedTopic(topic)}
-            >
-              {topic}
-            </button>
-          {/each}
-        </div>
-      </div>
-
-      <div class={styles.section}>
-        <h2 class={styles.sectionTitle}>Difficulty</h2>
-        <div class={styles.lengthGrid}>
-          {#each DIFFICULTY_OPTIONS as option}
-            <button
-              class="{styles.lengthButton} {$gameSettingsStore.length === option.value ? styles.selected : ''}"
-              onclick={() => gameSettingsStore.setLength(option.value)}
-            >
-              <span class={styles.lengthLabel}>{option.label}</span>
-              <span class={styles.lengthWords}>{option.words}</span>
-            </button>
-          {/each}
-        </div>
-      </div>
-
-      <div class={styles.section}>
-        <h2 class={styles.sectionTitle}>Rounds: {$gameSettingsStore.rounds}</h2>
-        <input
-          type="range"
-          class={styles.rangeInput}
-          min={ROUND_MIN}
-          max={ROUND_MAX}
-          value={$gameSettingsStore.rounds}
-          oninput={(e) => gameSettingsStore.setRounds(Number(e.currentTarget.value))}
-        />
-        <div class={styles.rangeLabels}>
-          <span>{ROUND_MIN}</span>
-          <span>{ROUND_MAX}</span>
-        </div>
-      </div>
-
-      {#if error}
-        <div class={styles.error}>{error}</div>
-      {/if}
-
-      <button class={styles.startButton} onclick={handleCreateRoom} disabled={isCreatingRoom}>
-        {isCreatingRoom ? 'Creating...' : 'Create Room'}
-      </button>
+      <GameSettingsForm
+        title="multiplayer session setup"
+        subtitle="configure your game room and invite friends to play"
+        submitText="create room"
+        onSubmit={handleCreateRoom}
+        isLoading={isCreatingRoom}
+        {error}
+        showCustomDifficulty={false}
+      >
+        {#snippet children()}
+          <div class={styles.section}>
+            <div class={styles.sectionHeader}>
+              <h2 class={styles.sectionTitle}>your name</h2>
+              <p class={styles.sectionDescription}>how players will see you</p>
+            </div>
+            <div class={styles.sectionContent}>
+              <input
+                type="text"
+                class={styles.textInput}
+                placeholder="Enter your name"
+                bind:value={playerName}
+              />
+            </div>
+          </div>
+        {/snippet}
+      </GameSettingsForm>
     {:else if step === 'lobby'}
       <button class={styles.backButton} onclick={handleBack}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
