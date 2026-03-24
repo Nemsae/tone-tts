@@ -3,7 +3,7 @@
   import { generateAITwisters, isApiKeyConfigured } from '@/features/twister-generator';
   import { createSession, saveSession, gameSettingsStore, PREDEFINED_TOPICS, type GameSettings } from '@/entities/session';
   import type { TwisterLength } from '@/shared/vendor';
-  import styles from './solo.module.scss';
+  import styles from './solo-setup.module.scss';
 
   const DIFFICULTY_OPTIONS: { value: TwisterLength; label: string; words: string }[] = [
     { value: 'short', label: 'Easy', words: '~5 words' },
@@ -59,7 +59,7 @@
       };
       const session = createSession(twisters, settings);
       saveSession(session);
-      push('/play');
+      push('/solo-game');
     } catch (err) {
       error = 'Failed to generate tongue twisters. Please check your API key.';
       console.error(err);

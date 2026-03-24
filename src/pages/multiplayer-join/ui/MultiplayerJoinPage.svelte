@@ -3,7 +3,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { socketService, multiplayerGameStore } from '@/shared/lib';
   import type { Player } from '@/shared/lib/multiplayer-types';
-  import styles from './multiplayer.module.scss';
+  import styles from './multiplayer-join.module.scss';
 
   let playerName = $state('');
   let roomCode = $state('');

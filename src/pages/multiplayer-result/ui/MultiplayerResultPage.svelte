@@ -19,7 +19,7 @@
   }
 
   function handlePlayAgainMultiplayer() {
-    push('/multiplayer');
+    push('/multiplayer-setup');
   }
 
   function formatTime(ms: number): string {

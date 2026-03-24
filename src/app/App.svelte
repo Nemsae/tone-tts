@@ -1,22 +1,25 @@
 <script lang="ts">
   import Router from 'svelte-spa-router';
-  import { HomePage, SoloPage } from '@/pages/home';
-  import { PlayPage } from '@/pages/play';
-  import { GameOverPage } from '@/pages/game-over';
-  import { HostLobbyPage } from '@/pages/multiplayer';
-  import { JoinRoomPage } from '@/pages/join-room';
+  import { HomePage } from '@/pages/home';
+  import { SoloSetupPage } from '@/pages/solo-setup';
+  import { SoloGamePage } from '@/pages/solo-game';
+  import { SoloResultPage } from '@/pages/solo-result';
+  import { MultiplayerSetupPage } from '@/pages/multiplayer-setup';
+  import { MultiplayerJoinPage } from '@/pages/multiplayer-join';
   import { MultiplayerGamePage } from '@/pages/multiplayer-game';
   import { MultiplayerResultPage } from '@/pages/multiplayer-result';
+  import { MultiplayerModePage } from '@/pages/multiplayer-mode';
 
   const routes = {
     '/': HomePage,
-    '/solo': SoloPage,
-    '/play': PlayPage,
-    '/game-over': GameOverPage,
-    '/multiplayer': HostLobbyPage,
-    '/join-room': JoinRoomPage,
+    '/solo-setup': SoloSetupPage,
+    '/solo-game': SoloGamePage,
+    '/solo-result': SoloResultPage,
+    '/multiplayer-setup': MultiplayerSetupPage,
+    '/multiplayer-join': MultiplayerJoinPage,
     '/multiplayer-game': MultiplayerGamePage,
     '/multiplayer-result': MultiplayerResultPage,
+    '/multiplayer-mode': MultiplayerModePage,
   };
 </script>
 

@@ -6,6 +6,11 @@
   justify-content: center;
   align-items: center;
   padding: $spacing-xl;
+  background: #f9f9f9;
+
+  @media (max-width: 640px) {
+    padding: $spacing-lg;
+  }
 }
 
 .container {
@@ -15,16 +20,22 @@
 }
 
 .title {
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 2.5rem;
-  font-weight: 700;
-  font-family: $font-family-bold;
-  color: $color-text;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: #1a1c1c;
   margin-bottom: $spacing-sm;
+
+  @media (max-width: 640px) {
+    font-size: 2rem;
+  }
 }
 
 .subtitle {
-  font-size: 1.125rem;
-  color: $color-text-muted;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  color: #474747;
   margin-bottom: $spacing-2xl;
 }
 
@@ -34,14 +45,18 @@
   gap: $spacing-sm;
   background: none;
   border: none;
-  color: $color-text-muted;
+  color: #474747;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.875rem;
   cursor: pointer;
   margin-bottom: $spacing-xl;
   padding: 0;
+  border-radius: 4px;
+  transition: all $transition-fast;
 
   &:hover {
-    color: $color-text;
+    color: #1a1c1c;
+    background: rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -51,43 +66,48 @@
 }
 
 .sectionTitle {
-  font-size: 1rem;
-  font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
   margin-bottom: $spacing-md;
-  color: $color-text;
+  color: #1a1c1c;
 }
 
 .textInput {
   width: 100%;
   padding: $spacing-md $spacing-lg;
-  border: 2px solid $color-border;
+  border: none;
+  border-bottom: 2px solid #c6c6c6;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 1rem;
-  background: $color-surface;
-  color: $color-text;
+  background: #eeeeee;
+  color: #1a1c1c;
+  border-radius: 4px 4px 0 0;
+  transition: border-color 200ms ease;
 
   &::placeholder {
-    color: $color-text-muted;
+    color: #777777;
   }
 
   &:focus {
     outline: none;
-    border-color: $color-primary;
+    border-bottom-color: #000000;
   }
 }
 
 .primaryInput {
-  border-color: $color-primary;
+  border-bottom-color: #000000;
+  background: #e8e8e8;
 
   &:focus {
-    border-color: $color-primary;
-    background: #f0f0f0;
+    border-bottom-color: #000000;
   }
 }
 
 .roomCodeInput {
   text-align: center;
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.5em;
   text-transform: uppercase;
 }
@@ -100,8 +120,9 @@
 }
 
 .hintText {
-  font-size: 0.875rem;
-  color: $color-text-muted;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #777777;
   text-align: center;
 }
 
@@ -109,44 +130,46 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: $spacing-sm;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .topicButton {
   padding: $spacing-md $spacing-lg;
-  background: $color-surface;
-  border: 2px solid $color-border;
-  font-size: 1rem;
-  font-weight: 700;
-  color: $color-text;
+  background: #eeeeee;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #474747;
   transition: all $transition-fast;
+  cursor: pointer;
 
   &:hover {
     background: #000000;
     color: #ffffff;
-    border-color: #000000;
   }
 
   &.selected {
     background: #000000;
     color: #ffffff;
-    border-color: #000000;
   }
 
   &.secondaryButton {
-    background: rgba($color-surface, 0.5);
-    color: $color-text-muted;
-    font-weight: 500;
+    background: #eeeeee;
+    color: #474747;
 
     &:hover {
       background: #000000;
       color: #ffffff;
-      border-color: #000000;
     }
 
     &.selected {
       background: #000000;
       color: #ffffff;
-      border-color: #000000;
     }
   }
 }
@@ -155,22 +178,26 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: $spacing-sm;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .lengthButton {
   padding: $spacing-md;
-  background: $color-surface;
-  border: 2px solid $color-border;
+  background: #eeeeee;
+  border: none;
+  border-radius: 4px;
   transition: all $transition-fast;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: $spacing-xs;
+  cursor: pointer;
 
   &:hover {
     background: #000000;
-    color: #ffffff;
-    border-color: #000000;
 
     .lengthLabel,
     .lengthWords {
@@ -180,8 +207,6 @@
 
   &.selected {
     background: #000000;
-    color: #ffffff;
-    border-color: #000000;
 
     .lengthLabel,
     .lengthWords {
@@ -191,45 +216,52 @@
 }
 
 .lengthLabel {
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.875rem;
-  font-weight: 700;
-  color: $color-text;
+  font-weight: 500;
+  color: #1a1c1c;
 }
 
 .lengthWords {
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.75rem;
-  color: $color-text-muted;
+  color: #777777;
 }
 
 .rangeInput {
   width: 100%;
   height: 8px;
-  background: $color-border;
+  background: #e2e2e2;
   appearance: none;
   cursor: pointer;
+  border-radius: 4px;
 
   &::-webkit-slider-thumb {
     appearance: none;
     width: 24px;
     height: 24px;
-    background: $color-primary;
+    background: #000000;
     cursor: pointer;
+    border-radius: 50%;
   }
 }
 
 .rangeLabels {
   display: flex;
   justify-content: space-between;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.75rem;
-  color: $color-text-muted;
+  color: #777777;
   margin-top: $spacing-xs;
 }
 
 .error {
   padding: $spacing-md;
   background: #ffffff;
-  border: 2px solid #000000;
-  color: #000000;
+  border: none;
+  border-left: 4px solid #ba1a1a;
+  color: #ba1a1a;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.875rem;
   margin-bottom: $spacing-lg;
 }
@@ -238,17 +270,17 @@
   width: 100%;
   padding: $spacing-lg $spacing-2xl;
   background: #000000;
-  border: 2px solid #000000;
-  border-radius: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: white;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e5e2e1;
   cursor: pointer;
   transition: all $transition-fast;
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 4px 4px 0 #000000;
+    background: #3c3b3b;
   }
 
   &:disabled {
@@ -260,31 +292,37 @@
 .roomCodeSection {
   margin-bottom: $spacing-2xl;
   padding: $spacing-xl;
-  background: $color-surface;
-  border: 2px solid #000000;
-  box-shadow: 8px 8px 0 #000000;
+  background: #ffffff;
+  border: none;
+  border-radius: 4px;
 }
 
 .roomCodeLabel {
   display: block;
-  font-size: 0.875rem;
-  color: $color-text-muted;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #777777;
   margin-bottom: $spacing-sm;
 }
 
 .roomCode {
   display: block;
-  font-size: 4rem;
-  font-weight: 700;
-  font-family: $font-family-bold;
-  letter-spacing: 0.5em;
-  color: $color-primary;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #000000;
+
+  @media (max-width: 640px) {
+    font-size: 2rem;
+  }
 }
 
 .roomCodeHint {
   display: block;
-  font-size: 0.875rem;
-  color: $color-text-muted;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #777777;
   margin-top: $spacing-sm;
 }
 
@@ -304,25 +342,31 @@
   justify-content: space-between;
   align-items: center;
   padding: $spacing-md;
-  background: $color-surface;
-  border: 2px solid $color-border;
+  background: #ffffff;
+  border: none;
+  border-radius: 4px;
 }
 
 .playerName {
-  font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: $spacing-sm;
+  color: #1a1c1c;
 }
 
 .hostBadge {
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.75rem;
   padding: 2px 8px;
   background: #000000;
   color: #ffffff;
+  border-radius: 4px;
 }
 
 .playerStatus {
-  font-size: 0.875rem;
-  color: $color-text-muted;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #777777;
 }

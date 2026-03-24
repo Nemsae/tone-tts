@@ -2,7 +2,7 @@
   import { push } from 'svelte-spa-router';
   import { loadFinalResult, clearFinalResult, type FinalResult } from '@/entities/session';
   import { onMount } from 'svelte';
-  import styles from './game-over.module.scss';
+  import styles from './solo-result.module.scss';
 
   function formatTime(ms: number): string {
     const seconds = Math.floor(ms / 1000);

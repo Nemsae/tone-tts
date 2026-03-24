@@ -5,7 +5,7 @@
   import { gameSettingsStore, PREDEFINED_TOPICS, type GameSettings } from '@/entities/session';
   import type { TwisterLength } from '@/shared/vendor';
   import type { GameSettings as MultiplayerGameSettings, Player } from '@/shared/lib/multiplayer-types';
-  import styles from './multiplayer.module.scss';
+  import styles from './multiplayer-setup.module.scss';
 
   const DIFFICULTY_OPTIONS: { value: TwisterLength; label: string; words: string }[] = [
     { value: 'short', label: 'Easy', words: '~5 words' },

@@ -41,7 +41,7 @@
   function handleComplete(result: { accuracy: number; elapsedTime: number }) {
     saveFinalResult({ accuracy: result.accuracy, elapsedTime: result.elapsedTime });
     clearSession();
-    push('/game-over');
+    push('/solo-result');
   }
 
   const currentTwister = $derived(session ? getCurrentTwister(session) : null);

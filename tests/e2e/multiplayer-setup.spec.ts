@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Multiplayer Host Page', () => {
   test('should display create multiplayer game form', async ({ page }) => {
-    await page.goto('/multiplayer');
+    await page.goto('/multiplayer-setup');
 
     await expect(page.locator('h1')).toContainText('Create Multiplayer Game');
     await expect(page.getByPlaceholder('Enter your name')).toBeVisible();
@@ -11,7 +11,7 @@ test.describe('Multiplayer Host Page', () => {
   });
 
   test('should have back button that navigates to home', async ({ page }) => {
-    await page.goto('/multiplayer');
+    await page.goto('/multiplayer-setup');
 
     await page.locator('button:has-text("Back")').click();
 
@@ -19,7 +19,7 @@ test.describe('Multiplayer Host Page', () => {
   });
 
   test('should show error when trying to create room without name', async ({ page }) => {
-    await page.goto('/multiplayer');
+    await page.goto('/multiplayer-setup');
 
     await page.locator('button:has-text("Create Room")').click();
 
@@ -27,7 +27,7 @@ test.describe('Multiplayer Host Page', () => {
   });
 
   test('should show error when trying to create room without topic', async ({ page }) => {
-    await page.goto('/multiplayer');
+    await page.goto('/multiplayer-setup');
 
     await page.getByPlaceholder('Enter your name').fill('TestPlayer');
 
@@ -37,7 +37,7 @@ test.describe('Multiplayer Host Page', () => {
   });
 
   test('should attempt to create room with valid input', async ({ page }) => {
-    await page.goto('/multiplayer');
+    await page.goto('/multiplayer-setup');
 
     await page.getByPlaceholder('Enter your name').fill('HostPlayer');
     await page.getByText('Animals').click();
