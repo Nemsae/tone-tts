@@ -1,6 +1,6 @@
 # Tone TTS
 
-A React-based web game for practicing pronunciation using Twister-style word challenges and speech recognition.
+A Svelte-based web game for practicing pronunciation using Twister-style word challenges and speech recognition.
 
 ## Setup
 
