@@ -110,9 +110,15 @@
   border-radius: 4px;
   transition: all 150ms ease;
   background: transparent;
+  cursor: pointer;
 
   &:hover {
     background: #eeeeee;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #000000;
+    outline-offset: 2px;
   }
 
   .topicRadio:checked + & {
@@ -123,24 +129,12 @@
 }
 
 .customTopicInput {
+  @include input-base;
   width: 100%;
   padding: 0.75rem 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.875rem;
-  color: #1a1c1c;
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(119, 119, 119, 0.2);
-  transition: border-color 200ms ease;
-
-  &::placeholder {
-    color: #777777;
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom-color: #000000;
-  }
 }
 
 .difficultyButtons {
@@ -170,6 +164,11 @@
 
   &:hover {
     color: #1a1c1c;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #000000;
+    outline-offset: 2px;
   }
 
   &.selected {
@@ -222,12 +221,15 @@
   cursor: pointer;
 
   &::-webkit-slider-thumb {
-    appearance: none;
+    @include slider-thumb;
     width: 12px;
     height: 12px;
     background: #000000;
-    cursor: pointer;
-    border-radius: 50%;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #000000;
+    outline-offset: 4px;
   }
 }
 

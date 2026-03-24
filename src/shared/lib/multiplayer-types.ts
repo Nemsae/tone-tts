@@ -9,6 +9,9 @@ export interface GameSettings {
   length: TwisterLength;
   customLength?: number;
   rounds: number;
+  roundTimeLimit?: number | null;
+  autoSubmitEnabled?: boolean;
+  autoSubmitDelay?: number;
 }
 
 export interface Player {

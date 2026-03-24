@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import Button from './Button.svelte';
 
   interface Props {
     isOpen: boolean;
@@ -9,7 +10,7 @@
     confirmLabel?: string;
     cancelLabel?: string;
     onConfirm?: () => void;
-    confirmVariant?: 'primary' | 'danger';
+    confirmVariant?: 'primary' | 'secondary';
   }
 
   let {
@@ -43,19 +44,63 @@
       </div>
       <div class="modal-actions">
         {#if cancelLabel}
-          <button class="modal-btn modal-btn-cancel" onclick={onClose}>
+          <Button variant="secondary" onclick={onClose}>
             {cancelLabel}
-          </button>
+          </Button>
         {/if}
         {#if onConfirm}
-          <button
-            class="modal-btn modal-btn-{confirmVariant}"
-            onclick={onConfirm}
-          >
+          <Button variant={confirmVariant} onclick={onConfirm}>
             {confirmLabel}
-          </button>
+          </Button>
         {/if}
       </div>
     </div>
   </div>
 {/if}
+
+<style lang="scss">
+  @use '../../app/styles/variables' as *;
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: $spacing-lg;
+  }
+
+  .modal-content {
+    background: $color-surface-container-lowest;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    max-width: 400px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-title {
+    font-family: $font-family-display;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $color-on-surface;
+    margin-bottom: $spacing-lg;
+  }
+
+  .modal-body {
+    font-family: $font-family-base;
+    font-size: 0.875rem;
+    color: $color-on-surface-variant;
+    margin-bottom: $spacing-xl;
+    line-height: 1.6;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+  }
+</style>

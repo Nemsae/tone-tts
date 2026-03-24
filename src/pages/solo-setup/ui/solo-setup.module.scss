@@ -110,6 +110,11 @@
     border-color: $color-primary;
     background: #f0f0f0;
   }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
 }
 
 .hintText {
@@ -119,18 +124,9 @@
 }
 
 .textInput {
+  @include input-base;
   flex: 1;
   min-width: 150px;
-  padding: $spacing-sm $spacing-md;
-  border: 2px solid $color-border;
-  font-size: 0.875rem;
-  background: $color-surface;
-  color: $color-text;
-
-  &:focus {
-    outline: none;
-    border-color: $color-primary;
-  }
 }
 
 .lengthGrid {
@@ -140,10 +136,7 @@
 }
 
 .lengthButton {
-  padding: $spacing-md;
-  background: $color-surface;
-  border: 2px solid $color-border;
-  transition: all $transition-fast;
+  @include button-group-item;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,6 +162,11 @@
     .lengthWords {
       color: #ffffff;
     }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
   }
 }
 
@@ -197,18 +195,9 @@
 }
 
 .numberInput {
+  @include input-base;
   width: 80px;
-  padding: $spacing-sm;
-  border: 2px solid $color-border;
-  font-size: 0.875rem;
-  background: $color-surface;
-  color: $color-text;
   text-align: center;
-
-  &:focus {
-    outline: none;
-    border-color: $color-primary;
-  }
 }
 
 .rangeInput {
@@ -219,11 +208,7 @@
   cursor: pointer;
 
   &::-webkit-slider-thumb {
-    appearance: none;
-    width: 24px;
-    height: 24px;
-    background: $color-primary;
-    cursor: pointer;
+    @include slider-thumb;
   }
 }
 

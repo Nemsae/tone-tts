@@ -9,7 +9,7 @@
   let error = $state('');
 
   async function handleStartGame() {
-    const topic = gameSettingsStore.topic;
+    const topic = gameSettingsStore.selectedTopic;
     const length = gameSettingsStore.length;
     const customLength = gameSettingsStore.customLength;
     const rounds = gameSettingsStore.rounds;
@@ -45,6 +45,8 @@
         length,
         customLength: length === 'custom' ? customLength : undefined,
         rounds,
+        autoSubmitEnabled: gameSettingsStore.autoSubmitEnabled,
+        autoSubmitDelay: gameSettingsStore.autoSubmitDelay,
       };
       const session = createSession(twisters, settings);
       saveSession(session);
@@ -76,5 +78,6 @@
     onSubmit={handleStartGame}
     {isLoading}
     {error}
+    showAutoSubmit={true}
   />
 {/if}

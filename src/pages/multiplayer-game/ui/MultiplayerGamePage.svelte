@@ -6,8 +6,15 @@
   import type { Twister, Player, LeaderboardEntry } from '@/shared/lib/multiplayer-types';
   import styles from './multiplayer-game.module.scss';
 
-  const ROUND_DURATION = 30000;
-  const AUTO_CHECK_DELAY = 1500;
+  const DEFAULT_ROUND_DURATION = 30000;
+
+  function getRoundDuration(settings: any): number {
+    if (!settings?.roundTimeLimit) return DEFAULT_ROUND_DURATION;
+    return settings.roundTimeLimit;
+  }
+
+  let autoSubmitEnabled = $derived($multiplayerGameStore.game?.settings?.autoSubmitEnabled ?? false);
+  let autoSubmitDelay = $derived($multiplayerGameStore.game?.settings?.autoSubmitDelay ?? 1500);
 
   let elapsedTime = $state(0);
   let roundStartTime = $state<number | null>(null);
@@ -70,7 +77,7 @@
       mySimilarity = null;
       multiplayerGameStore.handleRoundAdvanced(data);
       speechStore.stopListening();
-      speechStore.clearTranscript();
+      speechStore.clearTranscript(true);
       speechState = { ...speechState, isListening: false, transcript: '' };
       speechStore.startListening();
     });
@@ -92,6 +99,7 @@
       leaderboard = data.leaderboard;
       multiplayerGameStore.handleGameEnded(data);
       speechStore.stopListening();
+      speechStore.clearTranscript();
       push('/multiplayer-result');
     });
 
@@ -102,8 +110,14 @@
 
     checkMicPermission();
 
+    const handleBeforeUnload = () => {
+      speechStore.clearTranscript();
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
       unsubscribe();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   });
 
@@ -122,6 +136,7 @@
     socket.off('game-ended');
     socket.off('player-left');
     speechStore.stopListening();
+    speechStore.clearTranscript();
   });
 
   let timerInterval: ReturnType<typeof setInterval> | null = null;
@@ -196,8 +211,9 @@
   }
 
   function getRemainingTime(): number {
-    if (!roundStartTime) return ROUND_DURATION;
-    return Math.max(0, ROUND_DURATION - (Date.now() - roundStartTime));
+    const roundDuration = getRoundDuration($multiplayerGameStore.game?.settings);
+    if (!roundStartTime) return roundDuration;
+    return Math.max(0, roundDuration - (Date.now() - roundStartTime));
   }
 
   $effect(() => {
@@ -213,13 +229,13 @@
       return;
     }
 
-    if (text && !hasSubmitted) {
+    if (text && !hasSubmitted && autoSubmitEnabled) {
       if (autoCheckTimer) {
         clearTimeout(autoCheckTimer);
       }
       autoCheckTimer = setTimeout(() => {
         handleSubmit();
-      }, AUTO_CHECK_DELAY);
+      }, autoSubmitDelay);
     }
   });
 </script>
@@ -304,9 +320,17 @@
               <button class="{styles.micButton} {styles.listening}" onclick={() => speechStore.stopListening()}>
                 Stop
               </button>
-              <button class={styles.submitButton} onclick={handleSubmit} disabled={!speechState.transcript}>
-                Submit Answer
-              </button>
+              {#if !autoSubmitEnabled && speechState.transcript}
+                <button class={styles.submitButton} onclick={handleSubmit}>
+                  Submit Answer
+                </button>
+              {/if}
+
+              {#if speechState.transcript}
+                <button class={styles.resetButton} onclick={() => speechStore.clearTranscript(true)}>
+                  Reset
+                </button>
+              {/if}
             {/if}
           </div>
         {/if}

@@ -1,0 +1,108 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+}
+
+.roomCodeSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  background: var(--color-surface);
+  border-radius: 12px;
+  border: 2px solid var(--color-border);
+}
+
+.roomCodeLabel {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.roomCode {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  color: var(--color-primary);
+}
+
+.roomCodeHint {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.playersSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.playersList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playerItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: var(--color-surface);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.playerName {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hostBadge {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 4px;
+}
+
+.playerStatus {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.error {
+  padding: 12px;
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border-radius: 8px;
+  text-align: center;
+}

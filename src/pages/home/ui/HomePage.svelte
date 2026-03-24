@@ -18,12 +18,12 @@
     push('/multiplayer-join');
   }
 
-  const activeRooms = [
-    { name: "jazz & swing session", players: "3/4", level: "level 12", type: 'public' },
-    { name: "midnight rhythm", players: "2/2", level: "pro", type: 'private' },
-    { name: "disco inferno", players: "1/8", level: "beginner", type: 'public' },
-    { name: "techno pulse", players: "6/8", level: "expert", type: 'public' },
-  ];
+  // const activeRooms = [
+  //   { name: "jazz & swing session", players: "3/4", level: "level 12", type: 'public' },
+  //   { name: "midnight rhythm", players: "2/2", level: "pro", type: 'private' },
+  //   { name: "disco inferno", players: "1/8", level: "beginner", type: 'public' },
+  //   { name: "techno pulse", players: "6/8", level: "expert", type: 'public' },
+  // ];
 </script>
 
 <div class={styles.page}>
@@ -132,8 +132,8 @@
       </div>
     </div>
 
-    <div class={styles.section}>
-      <h2 class={styles.sectionTitle}>active rooms.</h2>
+    <!-- <div class={styles.section}>
+      <h2 class={styles.sectionTitle}>active rooms</h2>
       
       <div class={styles.roomList}>
         {#each activeRooms as room}
@@ -161,32 +161,6 @@
           </div>
         {/each}
       </div>
-    </div>
-  </div>
-
-  <div class={styles.bottomNav}>
-    <button class={styles.navItem}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
-      </svg>
-      <span>Home</span>
-    </button>
-    <button class={styles.navItem} onclick={handleMultiplayerLounge}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-      <span>Lobby</span>
-    </button>
-    <button class={styles.navItem}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-        <circle cx="12" cy="7" r="4" />
-      </svg>
-      <span>Profile</span>
-    </button>
+    </div> -->
   </div>
 </div>

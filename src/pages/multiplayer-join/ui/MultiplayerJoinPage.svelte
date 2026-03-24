@@ -3,6 +3,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { socketService, multiplayerGameStore } from '@/shared/lib';
   import type { Player } from '@/shared/lib/multiplayer-types';
+  import { Button, Input } from '@/shared/ui';
   import styles from './multiplayer-join.module.scss';
 
   let playerName = $state('');
@@ -77,6 +78,7 @@
       if (response.success) {
         players = response.game.players;
         multiplayerGameStore.handleJoinRoom(response);
+        push('/multiplayer-lobby');
       } else {
         error = response.error || 'Failed to join room';
       }
@@ -98,21 +100,19 @@
 
 <div class={styles.page}>
   <div class={styles.container}>
-    <button class={styles.backButton} onclick={handleBack}>
+    <Button variant="tertiary" onclick={handleBack}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M19 12H5M12 19l-7-7 7-7" />
       </svg>
       Back
-    </button>
+    </Button>
 
     <h1 class={styles.title}>Join Multiplayer Game</h1>
     <p class={styles.subtitle}>Enter the room code from your friend</p>
 
     <div class={styles.section}>
       <h2 class={styles.sectionTitle}>Your Name</h2>
-      <input
-        type="text"
-        class={styles.textInput}
+      <Input
         placeholder="Enter your name"
         bind:value={playerName}
       />
@@ -120,11 +120,9 @@
 
     <div class={styles.section}>
       <h2 class={styles.sectionTitle}>Room Code</h2>
-      <input
-        type="text"
-        class="{styles.textInput} {styles.roomCodeInput}"
+      <Input
         placeholder="ABCD"
-        maxlength="4"
+        maxlength={4}
         bind:value={roomCode}
         oninput={() => {
           roomCode = roomCode.toUpperCase();
@@ -136,8 +134,8 @@
       <div class={styles.error}>{error}</div>
     {/if}
 
-    <button class={styles.startButton} onclick={handleJoinRoom} disabled={isJoining}>
+    <Button variant="primary" onclick={handleJoinRoom} disabled={isJoining}>
       {isJoining ? 'Joining...' : 'Join Room'}
-    </button>
+    </Button>
   </div>
 </div>

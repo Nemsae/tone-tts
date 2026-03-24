@@ -230,6 +230,21 @@
   }
 }
 
+.resetButton {
+  padding: $spacing-lg $spacing-2xl;
+  background: #ffffff;
+  border: 2px solid #000000;
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+}
+
 .submittedMessage {
   padding: $spacing-lg;
   background: #000000;

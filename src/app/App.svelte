@@ -9,6 +9,7 @@
   import { MultiplayerGamePage } from '@/pages/multiplayer-game';
   import { MultiplayerResultPage } from '@/pages/multiplayer-result';
   import { MultiplayerModePage } from '@/pages/multiplayer-mode';
+  import { MultiplayerLobbyPage } from '@/pages/multiplayer-lobby';
 
   const routes = {
     '/': HomePage,
@@ -17,6 +18,7 @@
     '/solo-result': SoloResultPage,
     '/multiplayer-setup': MultiplayerSetupPage,
     '/multiplayer-join': MultiplayerJoinPage,
+    '/multiplayer-lobby': MultiplayerLobbyPage,
     '/multiplayer-game': MultiplayerGamePage,
     '/multiplayer-result': MultiplayerResultPage,
     '/multiplayer-mode': MultiplayerModePage,

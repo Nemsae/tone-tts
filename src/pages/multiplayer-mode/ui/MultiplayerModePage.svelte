@@ -1,5 +1,6 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router';
+  import { Button } from '@/shared/ui';
   import styles from './multiplayer-mode.module.scss';
 
   function handleCreateRoom() {
@@ -17,12 +18,12 @@
 
 <div class={styles.page}>
   <div class={styles.header}>
-    <button class={styles.backButton} onclick={handleBack}>
+    <Button variant="tertiary" onclick={handleBack}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M19 12H5M12 19l-7-7 7-7" />
       </svg>
       Back
-    </button>
+    </Button>
   </div>
 
   <div class={styles.container}>

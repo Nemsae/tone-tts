@@ -27,6 +27,7 @@ function createSpeechStore() {
   });
 
   let recognition: SpeechRecognition | null = null;
+  let isRestarting = false;
 
   function createRecognitionHandlers() {
     return {
@@ -65,6 +66,10 @@ function createSpeechStore() {
         store.update((state) => ({ ...state, error: errorMsg, isListening: false }));
       },
       onend: () => {
+        if (isRestarting) {
+          isRestarting = false;
+          return;
+        }
         store.update((state) => ({ ...state, isListening: false }));
       },
     };
@@ -154,8 +159,41 @@ function createSpeechStore() {
     store.update((state) => ({ ...state, error: null }));
   }
 
-  function clearTranscript() {
+  function clearTranscript(restartListening = false) {
     store.update((state) => ({ ...state, transcript: '' }));
+
+    if (!restartListening || !isSpeechSupported) {
+      return;
+    }
+
+    isRestarting = true;
+    recognition?.stop();
+
+    const handlers = createRecognitionHandlers();
+    const RecognitionConstructor = window.SpeechRecognition ?? window.webkitSpeechRecognition;
+    recognition = new RecognitionConstructor();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
+    recognition.onresult = handlers.onresult;
+    recognition.onerror = handlers.onerror;
+    recognition.onend = handlers.onend;
+
+    try {
+      recognition.start();
+      store.update((state) => ({ ...state, isListening: true }));
+    } catch (startError) {
+      isRestarting = false;
+      if (startError instanceof DOMException && startError.name === 'InvalidStateError') {
+        return;
+      }
+      store.update((state) => ({
+        ...state,
+        error: 'Could not start microphone capture. Please try again.',
+        isListening: false,
+      }));
+    }
   }
 
   init();

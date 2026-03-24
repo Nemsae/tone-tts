@@ -122,7 +122,8 @@
 .micButton,
 .checkButton,
 .nextButton,
-.skipButton {
+.skipButton,
+.submitButton {
   padding: $spacing-md $spacing-xl;
   font-size: 1rem;
   font-weight: 700;
@@ -180,6 +181,34 @@
   &:hover {
     background: #000000;
     color: #ffffff;
+  }
+}
+
+.submitButton {
+  background: #000000;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #333333;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.resetButton {
+  background: #ffffff;
+  color: #000000;
+  padding: $spacing-md $spacing-xl;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all $transition-fast;
+  border: 2px solid #000000;
+
+  &:hover {
+    background: #f5f5f5;
   }
 }
 

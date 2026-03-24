@@ -1,6 +1,7 @@
 <script lang="ts">
   import { gameSettingsStore, PREDEFINED_TOPICS } from '@/entities/session';
   import type { TwisterLength } from '@/shared/vendor';
+  import { Button, Input, RangeSlider } from '@/shared/ui';
   import styles from './game-settings-form.module.scss';
 
   interface Props {
@@ -11,6 +12,8 @@
     isLoading?: boolean;
     error?: string;
     showCustomDifficulty?: boolean;
+    showRoundTimeLimit?: boolean;
+    showAutoSubmit?: boolean;
     children?: import('svelte').Snippet;
   }
 
@@ -22,6 +25,8 @@
     isLoading = false,
     error = '',
     showCustomDifficulty = true,
+    showRoundTimeLimit = false,
+    showAutoSubmit = false,
     children,
   }: Props = $props();
 
@@ -37,6 +42,12 @@
 
   const ROUND_MIN = 1;
   const ROUND_MAX = 10;
+
+  const TIMER_MIN = 10;
+  const TIMER_MAX = 120;
+
+  const AUTO_SUBMIT_MIN = 500;
+  const AUTO_SUBMIT_MAX = 5000;
 </script>
 
 <div class={styles.page}>
@@ -76,12 +87,10 @@
               </label>
             {/each}
           </div>
-          <input
-            type="text"
-            class={styles.customTopicInput}
+          <Input
             placeholder="or type custom theme..."
             value={$gameSettingsStore.customTopic}
-            oninput={(e) => gameSettingsStore.setCustomTopic(e.currentTarget.value)}
+            oninput={(e) => gameSettingsStore.setCustomTopic((e.target as HTMLInputElement).value)}
           />
         </div>
       </div>
@@ -107,18 +116,12 @@
             <div class={styles.customLengthRow}>
               <span class={styles.customLengthLabel}>custom length</span>
               <span class={styles.customLengthValue}>{$gameSettingsStore.customLength} words</span>
-              <input
-                type="range"
-                class={styles.rangeInput}
+              <RangeSlider
                 min={5}
                 max={40}
                 value={$gameSettingsStore.customLength}
-                oninput={(e) => gameSettingsStore.setCustomLength(Number(e.currentTarget.value))}
+                oninput={(e) => gameSettingsStore.setCustomLength(Number((e.target as HTMLInputElement).value))}
               />
-              <div class={styles.rangeLabels}>
-                <span>5</span>
-                <span>40</span>
-              </div>
             </div>
           {/if}
         </div>
@@ -134,30 +137,88 @@
             <span class={styles.roundsLabel}>count</span>
             <span class={styles.roundsValue}>{$gameSettingsStore.rounds} rounds</span>
           </div>
-          <input
-            type="range"
-            class={styles.rangeInput}
+          <RangeSlider
             min={ROUND_MIN}
             max={ROUND_MAX}
             value={$gameSettingsStore.rounds}
-            oninput={(e) => gameSettingsStore.setRounds(Number(e.currentTarget.value))}
+            oninput={(e) => gameSettingsStore.setRounds(Number((e.target as HTMLInputElement).value))}
           />
-          <div class={styles.rangeLabels}>
-            <span>{ROUND_MIN}</span>
-            <span>{ROUND_MAX}</span>
-          </div>
         </div>
       </div>
+
+      {#if showRoundTimeLimit}
+        <div class={styles.section}>
+          <div class={styles.sectionHeader}>
+            <h2 class={styles.sectionTitle}>round timer</h2>
+            <p class={styles.sectionDescription}>time limit per round (optional)</p>
+          </div>
+          <div class={styles.sectionContent}>
+            <label class={styles.topicLabel}>
+              <input
+                type="checkbox"
+                class={styles.topicRadio}
+                checked={$gameSettingsStore.roundTimeLimitEnabled}
+                onchange={(e) => gameSettingsStore.setRoundTimeLimitEnabled((e.target as HTMLInputElement).checked)}
+              />
+              <span class={styles.topicButton}>enable timer</span>
+            </label>
+            {#if $gameSettingsStore.roundTimeLimitEnabled}
+              <div class={styles.customLengthRow}>
+                <span class={styles.customLengthLabel}>time limit</span>
+                <span class={styles.customLengthValue}>{$gameSettingsStore.roundTimeLimit}s</span>
+                <RangeSlider
+                  min={TIMER_MIN}
+                  max={TIMER_MAX}
+                  value={$gameSettingsStore.roundTimeLimit}
+                  oninput={(e) => gameSettingsStore.setRoundTimeLimit(Number((e.target as HTMLInputElement).value))}
+                />
+              </div>
+            {/if}
+          </div>
+        </div>
+      {/if}
+
+      {#if showAutoSubmit}
+        <div class={styles.section}>
+          <div class={styles.sectionHeader}>
+            <h2 class={styles.sectionTitle}>auto submit</h2>
+            <p class={styles.sectionDescription}>automatically submit your answer after speaking</p>
+          </div>
+          <div class={styles.sectionContent}>
+            <label class={styles.topicLabel}>
+              <input
+                type="checkbox"
+                class={styles.topicRadio}
+                checked={$gameSettingsStore.autoSubmitEnabled}
+                onchange={(e) => gameSettingsStore.setAutoSubmitEnabled((e.target as HTMLInputElement).checked)}
+              />
+              <span class={styles.topicButton}>enable auto submit</span>
+            </label>
+            {#if $gameSettingsStore.autoSubmitEnabled}
+              <div class={styles.customLengthRow}>
+                <span class={styles.customLengthLabel}>delay</span>
+                <span class={styles.customLengthValue}>{$gameSettingsStore.autoSubmitDelay}ms</span>
+                <RangeSlider
+                  min={AUTO_SUBMIT_MIN}
+                  max={AUTO_SUBMIT_MAX}
+                  step={100}
+                  value={$gameSettingsStore.autoSubmitDelay}
+                  oninput={(e) => gameSettingsStore.setAutoSubmitDelay(Number((e.target as HTMLInputElement).value))}
+                />
+              </div>
+            {/if}
+          </div>
+        </div>
+      {/if}
 
       {#if error}
         <div class={styles.error}>{error}</div>
       {/if}
 
       <div class={styles.ctaSection}>
-        <button type="submit" class={styles.submitButton} disabled={isLoading}>
+        <Button type="submit" disabled={isLoading} onclick={onSubmit}>
           {isLoading ? 'Loading...' : submitText}
-          <span class={styles.arrowIcon}>arrow_forward</span>
-        </button>
+        </Button>
       </div>
     </form>
   </div>

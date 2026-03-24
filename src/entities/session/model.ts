@@ -6,6 +6,8 @@ export interface GameSettings {
   length: TwisterLength;
   customLength?: number;
   rounds: number;
+  autoSubmitEnabled?: boolean;
+  autoSubmitDelay?: number;
 }
 
 export interface RoundResult {

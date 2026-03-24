@@ -64,6 +64,10 @@ export interface GameSettingsState {
   length: TwisterLength;
   customLength: number;
   rounds: number;
+  roundTimeLimitEnabled: boolean;
+  roundTimeLimit: number;
+  autoSubmitEnabled: boolean;
+  autoSubmitDelay: number;
 }
 
 const DEFAULT_SETTINGS: GameSettingsState = {
@@ -73,6 +77,10 @@ const DEFAULT_SETTINGS: GameSettingsState = {
   length: 'medium',
   customLength: 10,
   rounds: 3,
+  roundTimeLimitEnabled: false,
+  roundTimeLimit: 30,
+  autoSubmitEnabled: false,
+  autoSubmitDelay: 1500,
 };
 
 function createGameSettingsStore() {
@@ -98,9 +106,17 @@ function createGameSettingsStore() {
     get rounds() {
       return get({ subscribe }).rounds;
     },
-    get topic() {
-      const state = get({ subscribe });
-      return state.useCustomTopic ? state.customTopic : state.selectedTopic;
+    get roundTimeLimitEnabled() {
+      return get({ subscribe }).roundTimeLimitEnabled;
+    },
+    get roundTimeLimit() {
+      return get({ subscribe }).roundTimeLimit;
+    },
+    get autoSubmitEnabled() {
+      return get({ subscribe }).autoSubmitEnabled;
+    },
+    get autoSubmitDelay() {
+      return get({ subscribe }).autoSubmitDelay;
     },
     setSelectedTopic(topic: PredefinedTopic | '') {
       update((state) => ({
@@ -127,6 +143,18 @@ function createGameSettingsStore() {
     setRounds(rounds: number) {
       update((state) => ({ ...state, rounds }));
       gameFlowStore.setRounds(rounds);
+    },
+    setRoundTimeLimitEnabled(enabled: boolean) {
+      update((state) => ({ ...state, roundTimeLimitEnabled: enabled }));
+    },
+    setRoundTimeLimit(limit: number) {
+      update((state) => ({ ...state, roundTimeLimit: limit }));
+    },
+    setAutoSubmitEnabled(enabled: boolean) {
+      update((state) => ({ ...state, autoSubmitEnabled: enabled }));
+    },
+    setAutoSubmitDelay(delay: number) {
+      update((state) => ({ ...state, autoSubmitDelay: delay }));
     },
     reset() {
       set({ ...DEFAULT_SETTINGS });

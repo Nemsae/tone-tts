@@ -22,8 +22,8 @@
   let showSkipModal = $state(false);
 
   const DEFAULT_AUTO_CHECK_DELAY = 1500;
-  let autoCheckDelay = DEFAULT_AUTO_CHECK_DELAY;
-  let autoCheckEnabled = true;
+  let autoCheckDelay = $derived(session?.settings?.autoSubmitDelay ?? DEFAULT_AUTO_CHECK_DELAY);
+  let autoCheckEnabled = $derived(session?.settings?.autoSubmitEnabled ?? false);
   let autoCheckTimer: ReturnType<typeof setTimeout> | null = null;
   let timerInterval: ReturnType<typeof setInterval> | null = null;
   let elapsedTimeRef = 0;
@@ -35,12 +35,22 @@
     const unsubscribe = speechStore.subscribe((state) => {
       speechState = state;
     });
-    return unsubscribe;
+
+    const handleBeforeUnload = () => {
+      speechStore.clearTranscript();
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   });
 
   function handleComplete(result: { accuracy: number; elapsedTime: number }) {
     saveFinalResult({ accuracy: result.accuracy, elapsedTime: result.elapsedTime });
     clearSession();
+    speechStore.clearTranscript();
     push('/solo-result');
   }
 
@@ -127,7 +137,7 @@
     }
 
     speechStore.stopListening();
-    speechStore.clearTranscript();
+    speechStore.clearTranscript(true);
 
     setTimeout(() => {
       const nextSession = advanceSession(sessionToAdvance);
@@ -291,11 +301,22 @@
               <button class="{styles.micButton} {styles.listening}" onclick={handlePause}>
                 Stop
               </button>
+              {#if !autoCheckEnabled && speechState.transcript}
+                <button class={styles.submitButton} onclick={handleScore}>
+                  Submit Answer
+                </button>
+              {/if}
             {/if}
 
             <button class={styles.skipButton} onclick={() => showSkipModal = true}>
               Skip
             </button>
+
+              {#if speechState.transcript}
+                <button class={styles.resetButton} onclick={() => speechStore.clearTranscript(true)}>
+                  Reset
+                </button>
+              {/if}
           </div>
         </div>
 

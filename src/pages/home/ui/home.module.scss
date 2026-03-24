@@ -2,14 +2,13 @@
 
 .page {
   min-height: 100vh;
-  background: #f9f9f9;
-  color: #1a1c1c;
-  padding: $spacing-xl;
-  padding-bottom: 100px;
+  background: $color-bg;
+  color: $color-text;
+  padding: $spacing-2xl;
+  font-family: $font-family-base;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     padding: $spacing-lg;
-    padding-bottom: 80px;
   }
 }
 
@@ -26,25 +25,25 @@
 
 .headerActions {
   display: flex;
-  gap: $spacing-md;
+  gap: $spacing-sm;
 }
 
 .iconButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 4px;
-  background: #eeeeee;
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-sm;
+  background: transparent;
   border: none;
-  color: #474747;
+  color: $color-text-secondary;
   cursor: pointer;
   transition: all $transition-fast;
 
   &:hover {
-    background: #e2e2e2;
-    color: #000000;
+    background: $color-surface-container;
+    color: $color-text;
   }
 }
 
@@ -52,36 +51,36 @@
   max-width: 800px;
   margin: 0 auto;
 
-  @media (max-width: 640px) {
-    padding: 0 $spacing-md;
+  @media (max-width: 768px) {
+    padding: 0;
   }
 }
 
 .title {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: $font-family-display;
   font-size: 3.5rem;
-  font-weight: 300;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: $spacing-lg;
-  color: #1a1c1c;
+  margin-bottom: $spacing-md;
+  color: $color-text;
   letter-spacing: -0.02em;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     font-size: 2.5rem;
   }
 }
 
 .subtitle {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 1.25rem;
-  color: #474747;
+  font-family: $font-family-base;
+  font-size: 1.125rem;
+  color: $color-text-secondary;
   line-height: 1.6;
   text-align: center;
   margin-bottom: $spacing-2xl;
 }
 
 .highlight {
-  color: #000000;
+  color: $color-primary;
   font-weight: 600;
 }
 
@@ -90,40 +89,41 @@
 }
 
 .sectionTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: $font-family-display;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #777777;
+  color: $color-text-muted;
   margin-bottom: $spacing-xs;
 }
 
 .sectionSubtitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: $font-family-display;
   font-size: 1.75rem;
   font-weight: 600;
-  color: #1a1c1c;
-  margin-bottom: $spacing-xl;
+  color: $color-text;
+  margin-bottom: $spacing-lg;
 }
 
 .sectionDescription {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: $font-family-base;
   font-size: 1rem;
-  color: #474747;
-  margin-bottom: $spacing-xl;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-lg;
+  line-height: 1.6;
 }
 
 .loungeCard {
-  background: linear-gradient(135deg, #000000 0%, #3c3b3b 100%);
-  border-radius: 4px;
-  padding: $spacing-2xl;
+  background: $color-primary-container;
+  border-radius: $radius-md;
+  padding: $spacing-xl;
   cursor: pointer;
   transition: all $transition-fast;
+  margin-bottom: $spacing-lg;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    opacity: 0.95;
   }
 }
 
@@ -131,9 +131,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-lg;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
     gap: $spacing-lg;
@@ -144,18 +144,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  border-radius: 4px;
+  width: 64px;
+  height: 64px;
+  border-radius: $radius-sm;
   background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  color: $color-on-primary-container;
 }
 
 .quickActions {
   display: flex;
-  gap: $spacing-md;
+  gap: $spacing-sm;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     width: 100%;
   }
@@ -164,26 +164,30 @@
 .quickAction {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  padding: $spacing-md $spacing-lg;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
   background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  color: #ffffff;
-  font-family: 'Inter', system-ui, sans-serif;
+  border: none;
+  border-radius: $radius-sm;
+  color: $color-on-primary-container;
+  font-family: $font-family-base;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all $transition-fast;
 
-  @media (max-width: 640px) {
-    width: 100%;
-    justify-content: center;
-  }
-
   &:hover {
     background: rgba(255, 255, 255, 0.25);
-    border-color: #ffffff;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -191,8 +195,8 @@
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  padding-top: $spacing-lg;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .avatarStack {
@@ -203,15 +207,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
-  border: 2px solid #ffffff;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.75rem;
+  border: 2px solid $color-primary-container;
+  font-family: $font-family-base;
+  font-size: 0.625rem;
   font-weight: 600;
-  color: #ffffff;
+  color: $color-on-primary-container;
   margin-left: -8px;
 
   &:first-child {
@@ -220,35 +224,33 @@
 }
 
 .playerCount {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-family: $font-family-base;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .soloCard {
-  background: #ffffff;
+  background: $color-surface-container-lowest;
   border: none;
-  border-radius: 4px;
-  padding: $spacing-2xl;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
   cursor: pointer;
   transition: all $transition-fast;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
   &:hover {
-    transform: translateY(-4px);
-    background: #f3f3f3;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    background: $color-surface-container;
   }
 }
 
 .soloFeatures {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: $spacing-xl;
-  padding-bottom: $spacing-xl;
-  border-bottom: 1px solid #eeeeee;
+  justify-content: flex-start;
+  gap: $spacing-xl;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $color-outline-variant;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     gap: $spacing-md;
     align-items: flex-start;
@@ -258,10 +260,16 @@
 .featureItem {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  font-family: 'Inter', system-ui, sans-serif;
+  gap: $spacing-xs;
+  font-family: $font-family-base;
   font-size: 0.875rem;
-  color: #474747;
+  color: $color-text-secondary;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-tertiary;
+  }
 }
 
 .soloButton {
@@ -270,46 +278,49 @@
   justify-content: center;
   gap: $spacing-sm;
   width: 100%;
-  padding: $spacing-lg;
-  background: #000000;
+  padding: $spacing-md;
+  background: $color-primary;
   border: none;
-  border-radius: 4px;
-  color: #e5e2e1;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 1rem;
+  border-radius: $radius-sm;
+  color: $color-on-primary;
+  font-family: $font-family-base;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all $transition-fast;
 
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
   &:hover {
-    background: #3c3b3b;
-    transform: scale(1.02);
+    opacity: 0.9;
   }
 }
 
 .roomList {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: $spacing-sm;
 }
 
 .roomItem {
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  padding: $spacing-lg;
-  background: #ffffff;
+  padding: $spacing-md;
+  background: $color-surface-container-lowest;
   border: none;
-  border-radius: 4px;
+  border-radius: $radius-sm;
   transition: all $transition-fast;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     flex-wrap: wrap;
   }
 
   &:hover {
-    background: #f3f3f3;
+    background: $color-surface-container;
   }
 }
 
@@ -317,91 +328,66 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  background: #eeeeee;
-  color: #474747;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-sm;
+  background: $color-surface-container;
+  color: $color-text-secondary;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
 }
 
 .roomInfo {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 2px;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     order: 2;
     width: 100%;
-    margin-top: $spacing-sm;
+    margin-top: $spacing-xs;
   }
 }
 
 .roomName {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 1rem;
+  font-family: $font-family-base;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: #1a1c1c;
+  color: $color-text;
 }
 
 .roomDetails {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.875rem;
-  color: #474747;
+  font-family: $font-family-base;
+  font-size: 0.75rem;
+  color: $color-text-secondary;
 }
 
 .joinButton {
-  padding: $spacing-sm $spacing-lg;
+  padding: $spacing-xs $spacing-md;
   background: transparent;
-  border: 1px solid #000000;
-  border-radius: 4px;
-  color: #000000;
-  font-family: 'Inter', system-ui, sans-serif;
+  border: 1px solid $color-outline;
+  border-radius: $radius-sm;
+  color: $color-text;
+  font-family: $font-family-base;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   cursor: pointer;
   transition: all $transition-fast;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     order: 3;
     width: 100%;
-    margin-top: $spacing-sm;
+    margin-top: $spacing-xs;
   }
 
   &:hover {
-    background: #000000;
-    color: #ffffff;
-  }
-}
-
-.bottomNav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  padding: $spacing-md $spacing-xl;
-  background: #ffffff;
-  border-top: 1px solid #eeeeee;
-}
-
-.navItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: $spacing-xs;
-  padding: $spacing-sm $spacing-lg;
-  background: transparent;
-  border: none;
-  color: #474747;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all $transition-fast;
-
-  &:hover,
-  &.active {
-    color: #000000;
+    background: $color-primary;
+    border-color: $color-primary;
+    color: $color-on-primary;
   }
 }
