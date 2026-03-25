@@ -1,4 +1,4 @@
-# Tone TTS
+# TTS
 
 A Svelte-based web game for practicing pronunciation using Twister-style word challenges and speech recognition.
 
