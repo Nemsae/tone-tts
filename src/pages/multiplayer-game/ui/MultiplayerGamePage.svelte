@@ -17,6 +17,7 @@
   let autoSubmitDelay = $derived($multiplayerGameStore.game?.settings?.autoSubmitDelay ?? 1500);
 
   let elapsedTime = $state(0);
+  let remainingTime = $state(0);
   let roundStartTime = $state<number | null>(null);
   let currentTwister = $state<Twister | null>(null);
   let players = $state<Player[]>([]);
@@ -29,6 +30,8 @@
   let mySimilarity = $state<number | null>(null);
   let leaderboard = $state<LeaderboardEntry[]>([]);
   let gameStarted = $state(false);
+  let totalPausedTime = $state(0);
+  let pausedAt = $state<number | null>(null);
 
   let speechState = $state({ isListening: false, transcript: '', error: null as string | null });
   let autoCheckTimer: ReturnType<typeof setTimeout> | null = null;
@@ -60,6 +63,9 @@
       gameStarted = true;
       hasSubmitted = false;
       mySimilarity = null;
+      totalPausedTime = 0;
+      pausedAt = null;
+      gameStartTime = null;
       multiplayerGameStore.handleGameStarted(data);
       startGameTimer();
       speechStore.startListening();
@@ -84,13 +90,21 @@
 
     socket.on('game-paused', (data: { pausedAt: number; pausedBy: string }) => {
       gameStatus = 'paused';
+      pausedAt = data.pausedAt;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
       multiplayerGameStore.handleGamePaused(data);
       speechStore.stopListening();
     });
 
     socket.on('game-resumed', (data: { resumedAt: number; totalPausedTime: number }) => {
       gameStatus = 'playing';
+      totalPausedTime = data.totalPausedTime;
+      pausedAt = null;
       multiplayerGameStore.handleGameResumed(data);
+      startGameTimer();
       speechStore.startListening();
     });
 
@@ -154,14 +168,17 @@
   }
 
   function startGameTimer() {
-    gameStartTime = Date.now();
+    if (!gameStartTime) {
+      gameStartTime = Date.now();
+    }
     if (timerInterval) {
       clearInterval(timerInterval);
     }
     timerInterval = setInterval(() => {
       if (gameStartTime) {
-        elapsedTime = Date.now() - gameStartTime;
+        elapsedTime = Date.now() - gameStartTime - totalPausedTime;
       }
+      remainingTime = getRemainingTime();
     }, 100);
   }
 
@@ -213,7 +230,8 @@
   function getRemainingTime(): number {
     const roundDuration = getRoundDuration($multiplayerGameStore.game?.settings);
     if (!roundStartTime) return roundDuration;
-    return Math.max(0, roundDuration - (Date.now() - roundStartTime));
+    const now = pausedAt ?? Date.now();
+    return Math.max(0, roundDuration - (now - roundStartTime - totalPausedTime));
   }
 
   $effect(() => {
@@ -292,7 +310,7 @@
 
           <div class={styles.countdown}>
             <span class={styles.countdownLabel}>Time Left</span>
-            <span class={styles.countdownValue}>{Math.ceil(getRemainingTime() / 1000)}s</span>
+            <span class={styles.countdownValue}>{Math.ceil(remainingTime / 1000)}s</span>
           </div>
         </div>
       {/if}
