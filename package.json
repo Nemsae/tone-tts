@@ -14,7 +14,8 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "sh scripts/deploy.sh"
   },
   "dependencies": {
     "socket.io-client": "^4.7.0",

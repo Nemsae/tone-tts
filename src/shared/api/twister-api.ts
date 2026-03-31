@@ -17,7 +17,7 @@ export async function generateTwisters({
   customLength,
   rounds = 1,
 }: GenerateTwistersRequest): Promise<Twister[]> {
-  const response = await fetch('/api/generate', {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/generate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

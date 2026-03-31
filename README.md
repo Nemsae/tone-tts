@@ -7,7 +7,7 @@ A Svelte-based web game for practicing pronunciation using Twister-style word ch
 1. Clone the repo
 1. Copy `.env.example` to `.env` and configure the API endpoint if needed:
    ```
-   VITE_SOCKET_URL=http://localhost:3001
+   VITE_API_URL=http://localhost:3001
    VITE_API_TARGET=http://localhost:3001
    ```
 1. Run `npm install`
