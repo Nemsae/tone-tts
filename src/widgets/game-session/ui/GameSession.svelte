@@ -50,6 +50,7 @@
   function handleComplete(result: { accuracy: number; elapsedTime: number }) {
     saveFinalResult({ accuracy: result.accuracy, elapsedTime: result.elapsedTime });
     clearSession();
+    speechStore.stopListening();
     speechStore.clearTranscript();
     push('/solo-result');
   }
