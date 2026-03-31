@@ -5,7 +5,7 @@ class SocketService {
 
   connect(): Socket {
     if (!this.socket) {
-      this.socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3001', {
+      this.socket = io(import.meta.env.VITE_API_URL || 'http://localhost:8080', {
         transports: ['websocket'],
         autoConnect: true,
       });
