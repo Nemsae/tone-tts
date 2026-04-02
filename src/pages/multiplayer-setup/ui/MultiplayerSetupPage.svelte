@@ -2,7 +2,8 @@
   import { push } from 'svelte-spa-router';
   import { onMount, onDestroy } from 'svelte';
   import { socketService, multiplayerGameStore } from '@/shared/lib';
-  import { gameSettingsStore, type GameSettings, validateTopic } from '@/entities/session';
+  import { gameSettingsStore, validateTopic } from '@/entities/session';
+  import { get } from 'svelte/store';
   import type { GameSettings as MultiplayerGameSettings } from '@/shared/lib/multiplayer-types';
   import { GameSettingsForm } from '@/widgets/game-settings-form';
   import { Button, Input } from '@/shared/ui';
@@ -40,8 +41,9 @@
       return;
     }
 
-    const useCustomTopic = gameSettingsStore.useCustomTopic;
-    const topic = useCustomTopic ? gameSettingsStore.customTopic : gameSettingsStore.selectedTopic;
+    const storeState = get(gameSettingsStore);
+    const useCustomTopic = storeState.useCustomTopic;
+    const topic = useCustomTopic ? storeState.customTopic : storeState.selectedTopic;
     if (!topic) {
       error = 'Please select or enter a topic';
       return;
@@ -61,12 +63,12 @@
 
     const settings: MultiplayerGameSettings = {
       topic,
-      length: gameSettingsStore.length,
-      customLength: gameSettingsStore.length === 'custom' ? gameSettingsStore.customLength : undefined,
-      rounds: gameSettingsStore.rounds,
-      roundTimeLimit: gameSettingsStore.roundTimeLimitEnabled ? gameSettingsStore.roundTimeLimit * 1000 : null,
-      autoSubmitEnabled: gameSettingsStore.autoSubmitEnabled,
-      autoSubmitDelay: gameSettingsStore.autoSubmitDelay,
+      length: storeState.length,
+      customLength: storeState.length === 'custom' ? storeState.customLength : undefined,
+      rounds: storeState.rounds,
+      roundTimeLimit: storeState.roundTimeLimitEnabled ? storeState.roundTimeLimit * 1000 : null,
+      autoSubmitEnabled: storeState.autoSubmitEnabled,
+      autoSubmitDelay: storeState.autoSubmitDelay,
     };
 
     socket.emit('create-room', { playerName: playerName.trim(), settings }, (response: any) => {

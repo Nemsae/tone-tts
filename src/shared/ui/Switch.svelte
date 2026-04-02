@@ -79,10 +79,10 @@
     background: $color-on-surface-variant;
     border-radius: 50%;
     transition: transform $transition-fast;
+  }
 
-    .switch-input:checked + & {
-      transform: translateX(20px);
-      background: $color-on-primary;
-    }
+  .switch-input:checked ~ .switch-track .switch-thumb {
+    transform: translateX(20px);
+    background: $color-on-primary;
   }
 </style>

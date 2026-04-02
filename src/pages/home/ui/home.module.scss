@@ -212,15 +212,25 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid $color-primary-container;
-  font-family: $font-family-base;
-  font-size: 0.625rem;
-  font-weight: 600;
   color: $color-on-primary-container;
   margin-left: -8px;
 
   &:first-child {
     margin-left: 0;
   }
+}
+
+.plusAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: $color-primary;
+  border: 2px solid $color-primary-container;
+  color: $color-on-primary;
+  margin-left: -8px;
 }
 
 .playerCount {

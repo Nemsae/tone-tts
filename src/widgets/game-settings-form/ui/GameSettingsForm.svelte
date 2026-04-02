@@ -30,15 +30,17 @@
     children,
   }: Props = $props();
 
-  const DIFFICULTY_OPTIONS: { value: TwisterLength; label: string; words: string }[] = [
-    { value: 'short', label: 'Easy', words: '~5 words' },
-    { value: 'medium', label: 'Medium', words: '~10 words' },
-    { value: 'long', label: 'Hard', words: '~20 words' },
-  ];
-
-  if (showCustomDifficulty) {
-    DIFFICULTY_OPTIONS.push({ value: 'custom', label: 'Custom', words: '5-40 words' });
-  }
+  let DIFFICULTY_OPTIONS = $derived.by(() => {
+    const base = [
+      { value: 'short' as TwisterLength, label: 'Easy', words: '~5 words' },
+      { value: 'medium' as TwisterLength, label: 'Medium', words: '~10 words' },
+      { value: 'long' as TwisterLength, label: 'Hard', words: '~20 words' },
+    ];
+    if (showCustomDifficulty) {
+      base.push({ value: 'custom' as TwisterLength, label: 'Custom', words: '5-40 words' });
+    }
+    return base;
+  });
 
   const ROUND_MIN = 1;
   const ROUND_MAX = 10;

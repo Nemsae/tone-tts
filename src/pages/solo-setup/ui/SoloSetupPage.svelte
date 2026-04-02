@@ -1,7 +1,9 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router';
   import { generateAITwisters } from '@/features/twister-generator';
-  import { createSession, saveSession, gameSettingsStore, type GameSettings, validateTopic } from '@/entities/session';
+  import { createSession, saveSession, gameSettingsStore, validateTopic } from '@/entities/session';
+  import type { GameSettings } from '@/entities/session';
+  import { get } from 'svelte/store';
   import { GameSettingsForm } from '@/widgets/game-settings-form';
   import styles from './solo-setup.module.scss';
 
@@ -9,11 +11,12 @@
   let error = $state('');
 
   async function handleStartGame() {
-    const useCustomTopic = gameSettingsStore.useCustomTopic;
-    const topic = useCustomTopic ? gameSettingsStore.customTopic : gameSettingsStore.selectedTopic;
-    const length = gameSettingsStore.length;
-    const customLength = gameSettingsStore.customLength;
-    const rounds = gameSettingsStore.rounds;
+    const storeState = get(gameSettingsStore);
+    const useCustomTopic = storeState.useCustomTopic;
+    const topic = useCustomTopic ? storeState.customTopic : storeState.selectedTopic;
+    const length = storeState.length;
+    const customLength = storeState.customLength;
+    const rounds = storeState.rounds;
 
     if (!topic) {
       error = 'Please select or enter a topic';
@@ -49,8 +52,8 @@
         length,
         customLength: length === 'custom' ? customLength : undefined,
         rounds,
-        autoSubmitEnabled: gameSettingsStore.autoSubmitEnabled,
-        autoSubmitDelay: gameSettingsStore.autoSubmitDelay,
+        autoSubmitEnabled: storeState.autoSubmitEnabled,
+        autoSubmitDelay: storeState.autoSubmitDelay,
       };
       const session = createSession(twisters, settings);
       saveSession(session);

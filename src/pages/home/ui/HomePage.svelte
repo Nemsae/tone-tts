@@ -58,13 +58,13 @@
   <div class={styles.header}>
     <div class={styles.headerSpacer}></div>
     <div class={styles.headerActions}>
-      <button class={styles.iconButton}>
+      <button class={styles.iconButton} aria-label="Settings">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="3" />
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
         </svg>
       </button>
-      <button class={styles.iconButton}>
+      <button class={styles.iconButton} aria-label="Help">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10" />
           <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -86,7 +86,7 @@
       <h2 class={styles.sectionTitle}>Premium Experience</h2>
       <p class={styles.sectionSubtitle}>multiplayer lounge</p>
 
-      <div class={styles.loungeCard} onclick={handleMultiplayerLounge}>
+      <div class={styles.loungeCard} onclick={handleMultiplayerLounge} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMultiplayerLounge(); }}} role="button" tabindex="0">
         <div class={styles.loungeCardContent}>
           <div class={styles.loungeIcon}>
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -114,9 +114,21 @@
         </div>
         <div class={styles.lobbyInfo}>
           <span class={styles.avatarStack}>
-            <span class={styles.avatar}>JD</span>
-            <span class={styles.avatar}>MK</span>
-            <span class={styles.avatar}>AL</span>
+            {#each {length: Math.min(activeLobbyPlayerCount, 3)} as _}
+              <span class={styles.avatar}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </span>
+            {/each}
+            {#if activeLobbyPlayerCount > 3}
+              <span class={styles.plusAvatar}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            {/if}
           </span>
           <span class={styles.playerCount}>
             {numberFormatter.format(activeLobbyPlayerCount)} players active in the lobby right now.
@@ -131,7 +143,7 @@
         Sharpen your skills or enjoy a peaceful solo session. Your personal records await.
       </p>
 
-      <div class={styles.soloCard} onclick={handleSolo}>
+      <div class={styles.soloCard} onclick={handleSolo} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSolo(); }}} role="button" tabindex="0">
         <div class={styles.soloFeatures}>
           <div class={styles.featureItem}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
