@@ -6,11 +6,14 @@
   import type { Twister, Player, LeaderboardEntry } from '@/shared/lib/multiplayer-types';
   import styles from './multiplayer-game.module.scss';
 
-  const DEFAULT_ROUND_DURATION = 30000;
+  const DEFAULT_ROUND_DURATION_SECONDS = 30;
+  const MS_PER_SECOND = 1000;
 
   function getRoundDuration(settings: any): number {
-    if (!settings?.roundTimeLimit) return DEFAULT_ROUND_DURATION;
-    return settings.roundTimeLimit;
+    const roundTimeLimitSeconds = typeof settings?.roundTimeLimit === 'number'
+      ? settings.roundTimeLimit
+      : DEFAULT_ROUND_DURATION_SECONDS;
+    return roundTimeLimitSeconds * MS_PER_SECOND;
   }
 
   let autoSubmitEnabled = $derived($multiplayerGameStore.game?.settings?.autoSubmitEnabled ?? false);

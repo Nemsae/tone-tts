@@ -66,7 +66,7 @@
       length: storeState.length,
       customLength: storeState.length === 'custom' ? storeState.customLength : undefined,
       rounds: storeState.rounds,
-      roundTimeLimit: storeState.roundTimeLimitEnabled ? storeState.roundTimeLimit * 1000 : null,
+      roundTimeLimit: storeState.roundTimeLimitEnabled ? storeState.roundTimeLimit : null,
       autoSubmitEnabled: storeState.autoSubmitEnabled,
       autoSubmitDelay: storeState.autoSubmitDelay,
     };
